@@ -5,3 +5,9 @@ one:
 
 two:
   name: MyString
+
+oneway:
+  name: oneway
+
+romantic:
+  name: romantic
