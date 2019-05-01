@@ -2,6 +2,24 @@
 
 one:
   status: MyString
+<<<<<<< HEAD
 
 two:
   status: MyString
+=======
+  email: MyString
+  address: MyString
+  name: MyString
+  cc_name: MyString
+  cc_exp: 2019-05-01
+  cc_num: 1
+
+two:
+  status: MyString
+  email: MyString
+  address: MyString
+  name: MyString
+  cc_name: MyString
+  cc_exp: 2019-05-01
+  cc_num: 1
+>>>>>>> d84b5282587a95747e0a7d18416d7bc10d101515
