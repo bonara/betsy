@@ -1,15 +1,22 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  username: MyString
-  name: MyString
-  uid: 1
-  provider: MyString
-  email: MyString
+ada:
+  provider: github
+  uid: 12345
+  name: Ada Lovelace
+  email: ada@adadevelopersacademy.org
+  username: countess_ada
 
-two:
-  username: MyString
-  name: MyString
-  uid: 1
-  provider: MyString
-  email: MyString
+grace:
+  provider: github
+  uid: 13371337
+  name: Grace Hopper
+  email: grace@hooper.net
+  username: graceful_hopps
+
+margaret:
+  provider: github
+  uid: 17856925
+  name: Margaret Hamilton
+  email: margaret@hamilton.com
+  username: magnificent_marge
