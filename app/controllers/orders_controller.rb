@@ -3,56 +3,34 @@ class OrdersController < ApplicationController
     @orders = Order.all
   end
 
+  def show
+    @order = Order.find(params[:id])
+    render_404 unless @order
+
+  end
+
   def new
     @order = Order.new
   end
 
   def create
+    # Instantiate a new Order variable passing in the order params 
     @order = Order.new(order_params)
-    if @order.save
-      flash[:status] = :success
-      flash[:result_text] = "Successfully added product to your cart"
-      redirect_to order_path
-    else
-      flash[:status] = :failure
-      flash[:result_text] = "Could not add product to cart"
-      flash[:messages] = @order.errors.messages
-      render :new, status: :bad_request
+    #  Then before saving, iterate through the current_cart's order_items 
+    #  and append them to the new order variable. 
+    # Then remember to assign the cart_id of the order_item to nil 
+    @current_cart.order_items.each do |item|
+      @order.order_items << item
+      item.cart_id = nil
     end
-  end
-
-  def show
-    order_id = params[:id]
-    @merchants = Merchant.all
-    @merchant_order = @merchants.where(order_id: order_id)
-  end
-
-  def edit
-    order_id = params[:id]
-    @order = Order.find_by(id: order_id)
-    redirect_to orders_path if @order.nil?
-  end
-
-  def update
-    order_id = params[:id]
-    order = Order.find(order_id)
-
-    order.update(order_params)
-    redirect_to order_path(order.id)
-  end
-
-  def destroy
-    order_id = params[:id]
-    order = Order.find_by(id: order_id)
-
-    unless order
-      head :not_found
-      return
-    end
-
-    order.destroy
-
-    redirect_to orders_path
+    # Save the order after appending all order_items from the cart
+    @order.save
+    # Destroy the cart and set the session[:cart_id] = nil as the 
+    # and cart has been fulfilled and the user can start shopping 
+    # for a new order. Redirect back to root_path
+    Cart.destroy(session[:cart_id])
+    session[:cart_id] = nil
+    redirect_to root_path
   end
 end
 
