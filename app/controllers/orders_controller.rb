@@ -1,35 +1,50 @@
 class OrdersController < ApplicationController
+
   def index
     @orders = Order.all
   end
 
   def show
-    @order = Order.find(params[:id])
-    render_404 unless @order
-
+    @order = @current_order
   end
 
   def new
     @order = Order.new
   end
 
+  def edit
+    @order = Order.find(params[:id])
+  end
+
+  def update
+    @order = Order.find(params[:id])
+    @order.update(product_params)
+    redirect_to orders_path
+  end
+
+  def destroy
+    @order = @current_order
+    @order.destroy
+    session[:order_id] = nil
+    redirect_to root_path
+  end
+
   def create
-    # Instantiate a new Order variable passing in the order params 
-    @order = Order.new(order_params)
-    #  Then before saving, iterate through the current_cart's order_items 
-    #  and append them to the new order variable. 
-    # Then remember to assign the cart_id of the order_item to nil 
-    @current_cart.order_items.each do |item|
+    @current_order.order_items.each do |item|
       @order.order_items << item
-      item.cart_id = nil
+      item.order_id = nil
     end
-    # Save the order after appending all order_items from the cart
+  end
+
+  def checkout
+    @order = Order.new(order_params)
+    @current_order.order_items.each do |item|
+      @order.order_items << item
+      item.order_id = nil
+    end
     @order.save
-    # Destroy the cart and set the session[:cart_id] = nil as the 
-    # and cart has been fulfilled and the user can start shopping 
-    # for a new order. Redirect back to root_path
-    Cart.destroy(session[:cart_id])
-    session[:cart_id] = nil
+    Order.destroy(session[:order_id])
+    session[:order_id] = nil
     redirect_to root_path
   end
 end

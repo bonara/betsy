@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'merchants#create', as: 'auth_callback'
   delete '/logout', to: 'merchants#destroy', as: 'logout'
 
-  get 'carts/:id' => "carts#show", as: "cart"
-  delete 'carts/:id' => "carts#destroy"
+  get 'orders/:id' => "orders#show", as: 'show_order'
+  delete 'orders/:id' => "orders#destroy"
+  post 'orders/:id/checkout' => "orders#checkout", as: 'order_checkout'
+
 end

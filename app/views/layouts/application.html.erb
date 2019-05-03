@@ -1,43 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Planetsy</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <body>
-    <header>
-      <nav>
-       <ul>
-        <% if session[:merchant_id] %>
-          <li>
-            <%= link_to "Logged in as #{@login_user.name}", merchant_path(@login_user) %>
-          </li>
-          <li>
-            <%= link_to "Log out", logout_path, method: "delete" %>
-          </li>
-
-          <% else %>
-
-          <li>
-            <%= link_to "Login with GitHub", github_login_path %>
-          </li>
-        <% end %>     
-
-          <li>
-              <%= link_to "Home", root_path %>
-          </li>
-     
-          <li>
-              <%= link_to "My Cart" %>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <%= yield %>
-  </body>
+	<head>
+		<title>Planetsy</title><%= csrf_meta_tags %><%= csp_meta_tag %><%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %><%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+	</head>
+	<body>
+		<header>
+			<nav>
+				<ul><% if session[:merchant_id] %>
+					<li><%= link_to "Logged in as #{@login_user.name}", merchant_path(@login_user) %>
+					</li>
+					<li><%= link_to "Log out", logout_path, method: "delete" %>
+					</li><% else %>
+					<li><%= link_to "Login with GitHub", github_login_path %>
+					</li><% end %>
+					<li><%= link_to "Home", root_path %>
+					</li>
+					<li><%= link_to "My Cart", orders_path   %>
+					</li>
+					<li><%= link_to "New Order", new_order_path   %>
+					</li>
+					<li><%= link_to "Show Order", show_order_path(@current_order.id)   %>
+					</li>
+				</ul>
+			</nav>
+		</header><%= yield %>
+	</body>
 </html>
