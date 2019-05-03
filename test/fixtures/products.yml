@@ -19,10 +19,10 @@ jupiter:
   category: adventure
 
 mars:
-    name: Luxury Escape
-    price: 9859522.99
-    description: have the whole planet to yourself
-    stock: 1
-    photo_url: placeholder_url_3
-    merchant: grace
-    category: oneway
+  name: Luxury Escape
+  price: 9859522.99
+  description: have the whole planet to yourself
+  stock: 1
+  photo_url: placeholder_url_3
+  merchant: grace
+  category: oneway
