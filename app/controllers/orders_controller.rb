@@ -1,12 +1,13 @@
 class OrdersController < ApplicationController
+
   def index
     @orders = Order.all
   end
 
   def show
-    @order = Order.find(params[:id])
-    render_404 unless @order
-
+    order_id = params[:id]
+    @order_items = OrderItems.all
+    @order_order_items = @order_items.where(order_id: order_id)
   end
 
   def new
@@ -14,24 +15,49 @@ class OrdersController < ApplicationController
   end
 
   def create
-    # Instantiate a new Order variable passing in the order params 
-    @order = Order.new(order_params)
-    #  Then before saving, iterate through the current_cart's order_items 
-    #  and append them to the new order variable. 
-    # Then remember to assign the cart_id of the order_item to nil 
-    @current_cart.order_items.each do |item|
-      @order.order_items << item
-      item.cart_id = nil
+    if session[:order_id]
+      order = Order.find_by(id: session[:order_id])
+      if order.present?
+        order_id = order.id
+      else
+        session[:order_id] = nil
+      end
     end
-    # Save the order after appending all order_items from the cart
+
+    if session[:order_id] == nil
+      @order = Order.create
+      session[:order_id] = @order.id
+    end
+
     @order.save
-    # Destroy the cart and set the session[:cart_id] = nil as the 
-    # and cart has been fulfilled and the user can start shopping 
-    # for a new order. Redirect back to root_path
-    Cart.destroy(session[:cart_id])
-    session[:cart_id] = nil
-    redirect_to root_path
   end
+
+  def edit
+    order_id = params[:id]
+    @order = Order.find_by(id: order_id)
+    redirect_to order_path if @order.nil?
+  end
+
+  def update
+    if @order.update(order_params)
+      flash[:status] = :success
+      flash[:message] = "Successfully updated order #{@order.id}"
+      redirect_to order_path(@order)
+    else
+      flash.now[:status] = :error
+      flash.now[:message] = "Could not save order #{@order.id}"
+      render :edit, status: :bad_request
+    end
+  end
+
+  def destroy
+    @order.destroy
+    session[:order_id] = nil
+    flash[:status] = :success
+    flash[:message] = "Successfully deleted order #{@order.id}"
+    redirect_to orders_path
+  end
+
 end
 
 private
