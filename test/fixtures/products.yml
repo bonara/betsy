@@ -7,7 +7,6 @@ moon:
   stock: 5
   photo_url: placeholder_url_1
   merchant: ada
-  category: romantic
 
 jupiter:
   name: Skydiving 
@@ -16,7 +15,6 @@ jupiter:
   stock: 56
   photo_url: placeholder_url_2
   merchant: ada
-  category: adventure
 
 mars:
   name: Luxury Escape
@@ -25,4 +23,4 @@ mars:
   stock: 1
   photo_url: placeholder_url_3
   merchant: grace
-  category: oneway
+
