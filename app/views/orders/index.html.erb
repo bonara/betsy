@@ -1,3 +1,14 @@
-<h2>Shopping Cart Page</h2>
+<h2>Shown when customer clicks the cart. Shows details of all items in the current cart</h2>
 
-<h2>Shown when customer clicks the cart</h2>
+<h2>All Orders</h2>
+
+<% @orders.each do |order| %>
+  <p>Name: <%= order.name %></p>
+  <p>Email: <%= order.email %></p>
+  <p>Order Items: </p>
+  <ul>
+    <% order.order_items.each do |item| %>
+    <li><%= item.quantity %> x <%= item.product.name %></li>
+    <% end %>
+  </ul>
+<% end %>

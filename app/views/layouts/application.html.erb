@@ -15,11 +15,11 @@
 					</li><% end %>
 					<li><%= link_to "Home", root_path %>
 					</li>
-					<li><%= link_to "My Cart", orders_path   %>
+					<li><%= link_to "My Cart", carts_show_path   %>
 					</li>
 					<li><%= link_to "New Order", new_order_path   %>
 					</li>
-					<li><%= link_to "Show Order", show_order_path(@current_order.id)   %>
+					<li><%= link_to "Show Order", orders_path  %>
 					</li>
 				</ul>
 			</nav>
