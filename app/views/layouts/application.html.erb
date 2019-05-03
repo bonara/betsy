@@ -12,8 +12,27 @@
   <body>
     <header>
       <nav>
-       <ul>
-        <% if session[:merchant_id] %>
+        <ul>
+          <li>
+              <%= link_to "Planetsy", root_path %>
+          </li>
+          <li>
+              <%= link_to "All Tours", products_path %>
+          </li>
+          <li>
+              <%= link_to "All Categories" %>
+          </li>
+          <li>
+              <%= link_to "All Merchants" %>
+          </li>
+          <% if session[:merchant_id] %>
+            <li>
+                <%= link_to "Dashboard #{@current_user.name}" %>
+            </li>
+          <% end %>
+        </ul>
+        <ul>
+          <% if session[:merchant_id] %>
           <li>
             <%= link_to "Logged in as #{@current_user.name}", merchant_path(@current_user) %>
           </li>
@@ -26,18 +45,19 @@
           <li>
             <%= link_to "Login with GitHub", github_login_path %>
           </li>
-        <% end %>     
-
-          <li>
-              <%= link_to "Home", root_path %>
-          </li>
-     
+          <% end %>     
           <li>
               <%= link_to "My Cart", carts_show_path %>
           </li>
         </ul>
       </nav>
     </header>
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
+    <footer>
+      <p>&copy; Copyring 2019, Planetsy</p> 
+      <p>Powered by n2rk</p>
+    </footer>
   </body>
 </html>
