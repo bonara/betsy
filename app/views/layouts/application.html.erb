@@ -15,7 +15,7 @@
        <ul>
         <% if session[:merchant_id] %>
           <li>
-            <%= link_to "Logged in as #{@login_user.name}", merchant_path(@login_user) %>
+            <%= link_to "Logged in as #{@current_user.name}", merchant_path(@current_user) %>
           </li>
           <li>
             <%= link_to "Log out", logout_path, method: "delete" %>
@@ -26,9 +26,16 @@
           <li>
             <%= link_to "Login with GitHub", github_login_path %>
           </li>
-        <% end %>
+        <% end %>     
 
-      </ul>
+          <li>
+              <%= link_to "Home", root_path %>
+          </li>
+     
+          <li>
+              <%= link_to "My Cart" %>
+          </li>
+        </ul>
       </nav>
     </header>
     <%= yield %>
