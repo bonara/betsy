@@ -1,16 +1,31 @@
-<%= form_with model: @product do |f| %>
-  <%= f.label :name %>
+<%= form_with model:@product do |f| %>
+<p>Please fill out this product's information</p>
+  <div>
+  <%= f.label :name, "Tour Name" %>
   <%= f.text_field :name %>
+  </div>
 
-
-  <%= f.label :description %>
+  <div>
+  <%= f.label :description, "Description" %>
   <%= f.text_field :description %>
+  </div>
 
-  <%= f.label :price %>
+  <div>
+  <%= f.label :price, "Price" %>
   <%= f.text_field :price %>
+  </div>
 
-  <%= f.label :stock %>
+  <div>
+  <%= f.label :stock, "Stock" %>
   <%= f.text_field :stock %>
+  </div>
 
-  <%= f.submit %>
+  <div>
+  <%= f.label :photo_url, "Photo URL" %>
+  <%= f.text_field :photo_url %>
+  </div>
+
+  <div>
+  <%= f.submit button_text%>
+  </div>
 <% end %>

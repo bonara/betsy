@@ -1,9 +1,16 @@
-<h1> <%= @product.name %>  </h1>
+<section>
+  <div>
+  
+  
+  <div>
 
-<ul>
+  <div>
+  <h2> <%= @product.name %>  </h2>
 
-<li><%= @product.price %> </li>
-<li><%= @product.description %> </li>
-<li><%= @product.stock %> </li>
-
-</ul>
+  <ul>
+    <li><%= "price: #{@product.price}" %> </li>
+    <li><%= "Description #{@product.description}" %> </li>
+    <li><%= @product.stock %> </li>
+  </ul>
+  </div>
+</section>
