@@ -1,5 +1,6 @@
 class MerchantsController < ApplicationController
   before_action :require_login, only: %i[destroy dashboard]
+
   def index
     @merchants = Merchant.all
   end
@@ -10,9 +11,9 @@ class MerchantsController < ApplicationController
   end
 
   def create
-    auth_hash = request.env['omniauth.auth']
+    auth_hash = request.env["omniauth.auth"]
 
-    @merchant = Merchant.find_by(uid: auth_hash[:uid], provider: 'github')
+    @merchant = Merchant.find_by(uid: auth_hash[:uid], provider: "github")
     if @merchant
       # User was found in the database
       flash[:status] = :success
@@ -31,12 +32,15 @@ class MerchantsController < ApplicationController
         # way we've configured GitHub. Our strategy will
         # be to display error messages to make future
         # debugging easier.
+        binding.pry
         flash.now[:status] = :failure
         flash.now[:result_text] = '"Could not create new user account:'
-        flash[:error] = @merchant.errors.messages
+        flash.now[:messages] = @merchant.errors.messages
         return redirect_to root_path
       end
     end
+
+    binding.pry
 
     # If we get here, we have a valid user instance
     session[:merchant_id] = @merchant.id
@@ -46,7 +50,7 @@ class MerchantsController < ApplicationController
   def destroy
     session[:merchant_id] = nil
     flash[:status] = :success
-    flash[:result_text] = 'Successfully logged out!'
+    flash[:result_text] = "Successfully logged out!"
     redirect_to root_path
   end
 
