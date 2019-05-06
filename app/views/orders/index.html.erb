@@ -1,7 +1,8 @@
 
 <h2>Shopping Cart</h2>
-<% @orders.each do |order| %>
   <p>Order Items: </p>
+
+<% @orders.each do |order| %>
 <ul>
   <% order.order_items.each do |item| %>
     <li>Item: <%= item.product.name %>

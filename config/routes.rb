@@ -9,8 +9,6 @@ Rails.application.routes.draw do
   resources :order_items
 
 
-
-
   get 'merchants/:id/dashboard', to: 'merchants#dashboard', as: 'dashboard'
   get '/auth/github', as: 'github_login'
   get 'auth/:provider/callback', to: 'merchants#create', as: 'auth_callback'

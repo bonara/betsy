@@ -21,6 +21,8 @@ class OrdersController < ApplicationController
     if session[:order_id] == nil
       @order = Order.create(status: 'pending')
       session[:order_id] = @order.id
+    else
+      @order = Order.find_by(id: session[:order_id])
     end
 
     @order_item = OrderItem.create(
@@ -28,7 +30,7 @@ class OrdersController < ApplicationController
       product_id: params[:product_id],
       quantity: params[:quanity]
     )
-
+    redirect_to orders_path
   end
 
   # checkout

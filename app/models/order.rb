@@ -12,7 +12,7 @@ class Order < ApplicationRecord
   validates :cc_num, presence: true, if: :status_complete?
 
   def status_complete?
-    status == 'complete'
+    status == 'paid'
   end
 
 end
