@@ -21,14 +21,14 @@
               <%= link_to "All Tours", products_path %>
           </li>
           <li class="nav-item">
-              <%= link_to "All Categories" %>
+              <%= link_to "All Categories", categories_path %>
           </li>
           <li class="nav-item">
-              <%= link_to "All Merchants" %>
+              <%= link_to "All Merchants", merchants_path %>
           </li class="nav-item">
           <% if session[:merchant_id] %>
             <li class="nav-item">
-                <%= link_to "Dashboard #{@current_user.name}" %>
+                <%= link_to "Dashboard #{@current_user.name}", dashboard_path(@current_user) %>
             </li>
           <% end %>
         </ul>

@@ -1,5 +1,5 @@
 class MerchantsController < ApplicationController
-  before_action :require_login, only: [:destroy]
+  before_action :require_login, only: %i[destroy dashboard]
   def index
     @merchants = Merchant.all
   end
@@ -44,5 +44,10 @@ class MerchantsController < ApplicationController
     flash[:success] = 'Successfully logged out!'
 
     redirect_to root_path
+  end
+
+  def dashboard
+    @merchant = Merchant.find_by(id: params[:id])
+    render_404 unless @merchant
   end
 end

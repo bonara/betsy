@@ -1,0 +1,100 @@
+<ul>
+  <li>
+    <%= link_to "View your tours", merchant_path %>
+  </li>
+  <li>
+    <%= link_to "Add New Tour", new_product_path %>
+  </li>
+  <li>
+    <%= link_to "View all Categories", categories_path %>
+  </li>
+  <li>
+    <%= link_to "Add New Category", new_category_path %>
+  </li>
+</ul>
+
+
+<section>
+  <h3>Listed Tours</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @merchant.products.each do |product| %>
+        <tr>
+          <td><%= link_to product.name, product_path(product) %></td>
+          <td><%= product.price %></td>
+          <td><%= product.stock %></td>
+          <td>rating</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h3>Sold Tours</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Order#</th>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+        <th>Order Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @merchant.products.each do |product| %>
+        <% product.orders.where(status: "complete").each do |order|%>
+          <% order.order_items.each do |order_item|%>
+            <tr>
+              <td><%= order.id %></td>
+              <td><%= link_to order_item.product.name, product_path(order_item.product) %></td>
+              <td><%= order_item.product.price %></td>
+              <td><%= order_item.quantity %></td>
+              <td>subtotal</td>
+              <td><%= order.status %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h3>Revenue</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Incomplete</th>
+        <th>Complete</th>
+        <th>Shipped</th>
+        <th>Cancelled</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @merchant.products.each do |product| %>
+        <% product.orders.where(status: "complete").each do |order|%>
+          <% order.order_items.each do |order_item|%>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</section>

@@ -11,7 +11,7 @@ $primary-color: #288EBA;
 $dark-color: #1D6787;
 $secondary-color: #41AADB;
 $light-gray: #E8F1F2;
-$dark-blue: #13293D;
+$dark-blue: rgb(32, 93, 150);
 
 $default-border: 2px solid;
 
@@ -26,4 +26,8 @@ h1, h2, h3, h4, h5 {
 a:hover {
   color: $dark-blue;
   text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
 }
