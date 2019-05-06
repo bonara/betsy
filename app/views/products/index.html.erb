@@ -2,7 +2,9 @@
 
 <ul>
  <% @products.each do |product| %>
+  <li><%= image_tag "#{product.photo_url}", class: "product-image" %></li>
   <li> <%= link_to "#{product.name}", product_path(product) %> </li>
   <li> <%= button_to "Add #{product.name} to cart", new_order_path %> </li>
+
  <% end %>
 </ul>
