@@ -51,10 +51,6 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
-  def change_status
-    @product.change_status
-  end
-
   private
 
   def product_params

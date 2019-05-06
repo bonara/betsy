@@ -7,12 +7,5 @@ class Product < ApplicationRecord
 
   validates :name, uniqueness: true, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
-
-  def change_status
-      if status == "listed"
-        status = "retired"
-      else
-        status = "listed"
-      end
-  end
+  
 end
