@@ -1,9 +1,14 @@
-<h1> <%= @product.name %>  </h1>
+<section>
+  <div>
+    <h2> <%= @product.name %>  </h2>
 
-<ul>
-
-<li><%= @product.price %> </li>
-<li><%= @product.description %> </li>
-<li><%= @product.stock %> </li>
-
-</ul>
+    <ul>
+      <li><%= "price: #{@product.price}" %> </li>
+      <li><%= "Description #{@product.description}" %> </li>
+      <li><%= @product.stock %> </li>
+    </ul>
+    <% if session[:merchant_id] == @product.merchant_id%>
+      <%= link_to "Update", edit_product_path(@product), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</section>

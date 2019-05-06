@@ -2,6 +2,6 @@
 
 <ul>
  <% @merchants.each do |merchant| %>
-  <li> <%= merchant.username %> </li>
+  <li> <%= link_to "#{merchant.name}", merchant_path(merchant) %> </li>
  <% end %>
 </ul>
