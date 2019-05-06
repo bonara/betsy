@@ -1,9 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  rating: 1
-  comment: MyString
+  rating: 5
+  name: Skydiving 
+  user: grace
+  comment: Best vacation ever! 
 
 two:
-  rating: 1
-  comment: MyString
+  rating: 3
+  name: Skydiving
+  user: ada
+  comment: It's fine! 
