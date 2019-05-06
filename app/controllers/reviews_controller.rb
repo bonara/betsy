@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ReviewsController < ApplicationController
   skip_before_action :require_login
   before_action :find_product, only: [:new]
