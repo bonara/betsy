@@ -32,7 +32,7 @@ class MerchantsController < ApplicationController
         # way we've configured GitHub. Our strategy will
         # be to display error messages to make future
         # debugging easier.
-        binding.pry
+       
         flash.now[:status] = :failure
         flash.now[:result_text] = '"Could not create new user account:'
         flash.now[:messages] = @merchant.errors.messages
@@ -40,7 +40,7 @@ class MerchantsController < ApplicationController
       end
     end
 
-    binding.pry
+    
 
     # If we get here, we have a valid user instance
     session[:merchant_id] = @merchant.id
