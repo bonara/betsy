@@ -1,42 +1,74 @@
 class OrdersController < ApplicationController
   skip_before_action :require_login
+  
   def index
     @orders = Order.all
   end
 
+  # this is the cart
   def show
-    @order = Order.find(params[:id])
-    render_404 unless @order
-
+    @order_id = params[:id]
+    @order_items = OrderItems.all
+    @order_order_items = @order_items.where(order_id: order_id)
   end
 
   def new
     @order = Order.new
   end
 
+  # add_to_cart
   def create
-    # Instantiate a new Order variable passing in the order params 
-    @order = Order.new(order_params)
-    #  Then before saving, iterate through the current_cart's order_items 
-    #  and append them to the new order variable. 
-    # Then remember to assign the cart_id of the order_item to nil 
-    @current_cart.order_items.each do |item|
-      @order.order_items << item
-      item.cart_id = nil
+    if session[:order_id] == nil
+      @order = Order.create(status: 'pending')
+      session[:order_id] = @order.id
     end
-    # Save the order after appending all order_items from the cart
-    @order.save
-    # Destroy the cart and set the session[:cart_id] = nil as the 
-    # and cart has been fulfilled and the user can start shopping 
-    # for a new order. Redirect back to root_path
-    Cart.destroy(session[:cart_id])
-    session[:cart_id] = nil
-    redirect_to root_path
+
+    @order_item = OrderItem.create(
+      order_id: @order.id,
+      product_id: params[:product_id],
+      quantity: params[:quanity]
+    )
+
   end
+
+  # checkout
+  def edit
+    order_id = params[:id]
+    @order = Order.find_by(id: order_id)
+    redirect_to order_path if @order.nil?
+  end
+
+  # process payment
+  def update
+    if @order.update(order_params)
+      @order.status = 'complete'
+      flash[:status] = :success
+      flash[:message] = 'Purchase successful'
+      redirect_to order_confirmation_path(@order)
+    else
+      flash.now[:status] = :error
+      flash.now[:message] = 'Purchase not successful'
+      render :edit, status: :bad_request
+    end
+  end
+
+  # Delete the whole cart
+  def destroy
+    @order.destroy
+    session[:order_id] = nil
+    flash[:status] = :success
+    flash[:message] = 'Your cart is now empty'
+    redirect_to products_path
+  end
+
 end
 
 private
 
 def order_params
   params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+end
+
+def order_item_params
+  params.require(:order_item).permit(:quantity, :product_id)
 end

@@ -1,9 +1,9 @@
-require "test_helper"
+# require "test_helper"
 
-describe Category do
+# describe Category do
 
-  it "must be valid" do
-    value(categories(:oneway)).must_be :valid?
-  end
+#   it "must be valid" do
+#     value(categories(:oneway)).must_be :valid?
+#   end
 
-end
+# end

@@ -1,19 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  status: MyString
-  email: MyString
-  address: MyString
-  name: MyString
-  cc_name: MyString
+moon:
+  status: complete
+  email: test@email.com
+  address: 1600 road to nowhere
+  name: Bob
+  cc_name: Bobby
   cc_exp: 2019-05-01
-  cc_num: 1
+  cc_num: 1234 2222 3333 2345
 
-two:
-  status: MyString
-  email: MyString
-  address: MyString
-  name: MyString
-  cc_name: MyString
+mars:
+  status: complete
+  email: read@test.com
+  address: 120 my house
+  name: Sal
+  cc_name: Sally
   cc_exp: 2019-05-01
-  cc_num: 1
+  cc_num: 0987 2536 4826 3749

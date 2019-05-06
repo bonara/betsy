@@ -3,5 +3,6 @@
 <ul>
  <% @products.each do |product| %>
   <li> <%= link_to "#{product.name}", product_path(product) %> </li>
+  <li> <%= button_to "Add #{product.name} to cart", new_order_path %> </li>
  <% end %>
 </ul>
