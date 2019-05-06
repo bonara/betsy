@@ -1,0 +1,8 @@
+ <h2>Share your review!</h2>
+    <%= form_for :review, :url => {:action => "create", :id => @product} do |f| %>
+        <%= f.label :comment %>
+        <%= f.text_area :comment %>
+        <%= f.label :rating %>
+        <%= f.select :rating, options_for_select(1.. 5) %>
+        <p class="review-button">  <%= f.submit class: "button" %></p>
+        <% end %>
