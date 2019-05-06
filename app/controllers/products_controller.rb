@@ -1,14 +1,28 @@
 class ProductsController < ApplicationController
   skip_before_action :require_login, except: %i[new create destroy]
+  before_action :find_product, only: %i[show edit update]
   def root; end
 
   def index
     @products = Product.all
   end
 
-  def show
-    @product = Product.find_by(id: params[:id])
-    render_404 unless @product
+  def show; end
+
+  def edit; end
+
+  def update
+    @product.update_attributes(product_params)
+    if @product.save
+      flash[:status] = :success
+      flash[:result_text] = "Successfully updated #{@product.id}"
+      redirect_to product_path(@product)
+    else
+      flash.now[:status] = :failure
+      flash.now[:result_text] = 'Could not update product'
+      flash.now[:messages] = @product.errors.messages
+      render :edit, status: :not_found
+    end
   end
 
   def new
@@ -16,7 +30,7 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params.merge({ merchant_id: session[:merchant_id] }))
+    @product = Product.new(product_params.merge(merchant_id: session[:merchant_id]))
 
     if @product.save
       flash[:status] = :success
@@ -37,7 +51,14 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
+  private
+
   def product_params
     params.require(:product).permit(:name, :description, :stock, :price, :photo_url)
+  end
+
+  def find_product
+    @product = Product.find_by(id: params[:id])
+    render_404 unless @product
   end
 end
