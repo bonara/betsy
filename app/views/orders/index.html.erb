@@ -1,12 +1,21 @@
-<h2>All Orders</h2>
 
+<h2>Shopping Cart</h2>
 <% @orders.each do |order| %>
-  <p>Name: <%= order.status %></p>
-  <p>Email: <%= order.email %></p>
   <p>Order Items: </p>
-  <ul>
-    <% order.order_items.each do |item| %>
-    <li><%= item.quantity %> x <%= item.product.name %> </li>
-    <% end %>
-  </ul>
+<ul>
+  <% order.order_items.each do |item| %>
+    <li>Item: <%= item.product.name %>
+    <li>Price: <%= number_to_currency(item.product.price) %>
+    <li> Quantity: <%= item.quantity %>
+    <ul>
+      <li><%= link_to "Add one", order_item_add_path(item), method: :post%>
+      <li><%= link_to "Reduce one", order_item_reduce_path(item), method: :post%>
+      <li><%= link_to "Remove item", order_item_delete_path(item), method: :delete, data: {confirm: "Are you sure?"}%>
+      </ul>
+  <% end %>
+</ul>
 <% end %>
+
+<%= link_to "Proceed to checkout", new_order_path %><br>
+
+

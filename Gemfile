@@ -77,6 +77,8 @@ group :development do
   gem 'binding_of_caller'
   gem 'guard'
   gem 'guard-minitest'
+  gem 'dotenv-rails'
+
 end
 
 group :test do

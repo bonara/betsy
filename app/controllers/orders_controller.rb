@@ -1,12 +1,13 @@
 class OrdersController < ApplicationController
   skip_before_action :require_login
+  
   def index
     @orders = Order.all
   end
 
   # this is the cart
   def show
-    order_id = params[:id]
+    @order_id = params[:id]
     @order_items = OrderItems.all
     @order_order_items = @order_items.where(order_id: order_id)
   end
@@ -17,8 +18,8 @@ class OrdersController < ApplicationController
 
   # add_to_cart
   def create
-    if session[:order_id] != nil
-      @order = Order.create(status: 'incomplete')
+    if session[:order_id] == nil
+      @order = Order.create(status: 'pending')
       session[:order_id] = @order.id
     end
 
@@ -27,6 +28,7 @@ class OrdersController < ApplicationController
       product_id: params[:product_id],
       quantity: params[:quanity]
     )
+
   end
 
   # checkout

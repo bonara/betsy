@@ -15,8 +15,4 @@ class Order < ApplicationRecord
     status == 'complete'
   end
 
-
-  def sub_total
-    order_items.map(&:total_price).sum
-  end
 end
