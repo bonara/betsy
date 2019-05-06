@@ -1,0 +1,12 @@
+<section>
+  <%  if @merchant.products%>
+    <% @merchant.products.each do |product| %>
+    <ul>
+      <li><%= "#{product.name}" %> </li>
+      <li><%= "price: #{product.price}" %> </li>
+      <li><%= "Description: #{product.description}" %> </li>
+      <li><%= product.stock %> </li>
+    </ul>
+    <% end %>
+  <% end %>
+</section>
