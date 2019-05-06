@@ -2,8 +2,8 @@
 
 Rails.application.routes.draw do
   root 'products#root'
-  resources :products
-  resources :merchants, only: %i[index show]
+  resources :products 
+  resources :merchants, only: %i[index show] 
   resources :categories
   resources :orders
   resources :order_items
@@ -21,6 +21,5 @@ Rails.application.routes.draw do
   delete 'order_items/:id' => "order_items#destroy", as: 'order_item_delete'
 
   post '/orders/new', to: 'orders#create'
-
 
 end

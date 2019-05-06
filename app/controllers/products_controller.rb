@@ -51,10 +51,14 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
+  def change_status
+    @product.change_status
+  end
+
   private
 
   def product_params
-    params.require(:product).permit(:name, :description, :stock, :price, :photo_url)
+    params.require(:product).permit(:name, :description, :stock, :price, :photo_url, :status)
   end
 
   def find_product

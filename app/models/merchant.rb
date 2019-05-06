@@ -15,4 +15,5 @@ class Merchant < ApplicationRecord
     # We'll choose to do the saving outside of this method
     merchant
   end
+
 end

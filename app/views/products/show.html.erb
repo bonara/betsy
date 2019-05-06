@@ -6,6 +6,8 @@
       <li><%= "price: #{@product.price}" %> </li>
       <li><%= "Description #{@product.description}" %> </li>
       <li><%= @product.stock %> </li>
+      <li><%= @product.status %> </li>
+
     </ul>
     <% if session[:merchant_id] == @product.merchant_id%>
       <%= link_to "Update", edit_product_path(@product), class: "btn btn-primary" %>
