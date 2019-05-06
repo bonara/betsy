@@ -1,7 +1,6 @@
 <h1>New Category</h1>
 
-<%= render 'form', category: @category %>
-
+<%= render partial: 'form', locals: { button_text: "Create a Category" } %>
 <%= link_to 'Back', categories_path %>
 
 

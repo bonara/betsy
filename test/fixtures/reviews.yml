@@ -2,12 +2,10 @@
 
 one:
   rating: 5
-  name: Skydiving 
-  user: grace
+  product: Skydiving 
   comment: Best vacation ever! 
 
 two:
   rating: 3
-  name: Skydiving
-  user: ada
+  product: Skydiving
   comment: It's fine! 
