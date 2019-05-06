@@ -1,30 +1,34 @@
 class CategoriesController < ApplicationController
+  skip_before_action :require_login, only: [:index]
+  def index
+    @categories = Category.all
+  end
+
+  def show
+    @category = Category.find(params[:id])
+    render_404 unless @category
+  end
+
   def new
     @category = Category.new
   end
 
   def create
-    category = Category.new(category_params)
+    @category = Category.new(category_params)
 
-    successful = category.save
-    if successful
+    if @category.save
       flash[:status] = :success
-      flash[:message] = "successfully saved category #{category.name}"
+      flash[:result_text] = "Successfully created category #{@category.name}"
       redirect_to categories_path
     else
-      flash.now[:status] = :error
-      flash.now[:message] = "Could not save category"
+      flash.now[:status] = :failure
+      flash[:result_text] = 'Could not create a category'
+      flash[:messages] = @category.errors.messages
       render :new, status: :bad_request
     end
   end
 
-  def index
-    @categories = Category.all
-  end
-
   def category_params
-    return params.require(:category).permit(:name)
+    params.require(:category).permit(:name)
   end
-
-
 end

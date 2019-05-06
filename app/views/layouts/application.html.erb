@@ -4,7 +4,8 @@
     <title>Planetsy</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    <%= stylesheet_link_tag 'application', 'https://fonts.googleapis.com/css?family=Roboto' %>
+    <%= stylesheet_link_tag 'application', 'https://fonts.googleapis.com/css?family=Domine' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
@@ -12,46 +13,64 @@
   <body>
     <header>
       <nav>
-        <ul>
-          <li>
+        <ul class="nav site-nav-container">
+          <li class="nav-item">
               <%= link_to "Planetsy", root_path %>
           </li>
-          <li>
+          <li class="nav-item">
               <%= link_to "All Tours", products_path %>
           </li>
-          <li>
+          <li class="nav-item">
               <%= link_to "All Categories" %>
           </li>
-          <li>
+          <li class="nav-item">
               <%= link_to "All Merchants" %>
-          </li>
+          </li class="nav-item">
           <% if session[:merchant_id] %>
-            <li>
+            <li class="nav-item">
                 <%= link_to "Dashboard #{@current_user.name}" %>
             </li>
           <% end %>
         </ul>
-        <ul>
+        <ul class="nav user-nav-container">
           <% if session[:merchant_id] %>
-          <li>
+          <li class="nav-item">
             <%= link_to "Logged in as #{@current_user.name}", merchant_path(@current_user) %>
           </li>
-          <li>
+          <li class="nav-item">
             <%= link_to "Log out", logout_path, method: "delete" %>
           </li>
 
           <% else %>
 
-          <li>
+          <li class="nav-item">
             <%= link_to "Login with GitHub", github_login_path %>
           </li>
           <% end %>     
-          <li>
+          <li class="nav-item">
               <%= link_to "My Cart" %>
           </li>
         </ul>
       </nav>
     </header>
+
+    <% if flash[:result_text] or flash[:messages] %>
+    <section class="alert_container">
+      <div class="alert alert-<%= flash[:status].to_s == 'failure' ? 'warning' : flash[:status] %>">
+        <span><%= flash[:status].to_s == "failure" ? "A problem occurred: " : "" %><%= flash[:result_text] %></span>
+        <% if flash[:messages] %>
+          <ul>
+            <% flash[:messages].each do |name, problems| %>
+              <% problems.each do |problem| %>
+                <li><%= name %>: <%= problem %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
     <main>
       <%= yield %>
     </main>
