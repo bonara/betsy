@@ -52,30 +52,34 @@ class OrdersController < ApplicationController
 
   # process payment
   def update
-    @order.order_items.each do |item|
-      @purchased_product = Product.find_by(id: item.product_id)
-      next unless @purchased_product.stock > item.quantity.to_i
+    @order.transaction do
+      @order.order_items.each do |item|
+        @purchased_product = Product.find_by(id: item.product_id)
+        next unless @purchased_product.stock > item.quantity.to_i
 
-      @purchased_product.stock -= item.quantity.to_i
-      if @purchased_product.save
-        @order.update_attributes(order_params)
-        if @order.save
-          @order.status = 'paid'
-          @order.save
-          flash[:status] = :success
-          flash[:result_text] = 'Purchase successful'
-          session[:order_id] = nil
-          redirect_to root_path
-        # redirect_to order_confirmation_path(@order)
-        else
+        @purchased_product.stock -= item.quantity.to_i
+        unless @purchased_product.save
           flash.now[:status] = :failure
-          flash.now[:result_text] = 'Purchase not successful'
-          flash.now[:messages] = @order.errors.messages
+          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
           render :edit, status: :bad_request
+          return
         end
+      end
+
+      @order.update_attributes(order_params)
+      if @order.save
+        @order.status = 'paid'
+        @order.save
+        flash[:status] = :success
+        flash[:result_text] = 'Purchase successful'
+        session[:order_id] = nil
+        redirect_to root_path
+      # redirect_to order_confirmation_path(@order)
       else
         flash.now[:status] = :failure
-        flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+        flash.now[:result_text] = 'Purchase not successful'
+        flash.now[:messages] = @order.errors.messages
+        render :edit, status: :bad_request
       end
     end
   end
