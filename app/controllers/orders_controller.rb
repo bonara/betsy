@@ -84,15 +84,13 @@ class OrdersController < ApplicationController
     end
   end
 
-  # Delete the whole cart
+  # Empty the cart
   def destroy
-    @order.destroy
-    session[:order_id] = nil
+    @order.order_items.destroy_all
     flash[:status] = :success
-    flash[:message] = 'Your cart is now empty'
-    redirect_to products_path
+    flash[:result_text] = 'Your cart is now empty'
+    redirect_back(fallback_location: root_path)  
   end
-
   private
 
   def order_params
