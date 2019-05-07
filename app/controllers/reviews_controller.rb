@@ -3,7 +3,7 @@ class ReviewsController < ApplicationController
   before_action :find_product, only: [:new]
 
   def new
-    if session[:user_id] == @product.user_id
+    if session[:user_id] == @product.merchant_id
       flash[:message] = 'You cannot review your own product.'
       redirect_to products_path
       nil

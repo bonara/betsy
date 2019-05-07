@@ -29,3 +29,26 @@
   <% end %>
   </div>
 </section>
+
+<%= link_to "Leave a Review", new_product_review_path(@product.id), class: "btn btn-primary" %>
+
+
+<section>
+  <h3>Review</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Rating</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product.reviews.each do |review| %>
+            <tr>
+              <td><%= review.rating %></td>
+              <td><%= review.comment%></td>
+            </tr>
+          <% end %>
+    </tbody>
+  </table>
+</section>

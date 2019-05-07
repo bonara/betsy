@@ -2,11 +2,17 @@
 
 Rails.application.routes.draw do
   root 'products#root'
-  resources :products 
+  resources :products do
+    resources :reviews, only: %i[new create]
+  end
   resources :merchants, only: %i[index show] 
   resources :categories
   resources :orders
   resources :order_items
+  resources :reviews
+
+  # post '/product/:product_id/reviews', to: 'reviews#create', as: "product_reviews"
+  # get '/products/:product_id/reviews/new', to: 'reviews#new', as: 'new_product_review'
 
   get 'merchants/:id/dashboard', to: 'merchants#dashboard', as: 'dashboard'
   get '/auth/github', as: 'github_login'
