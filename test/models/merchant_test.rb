@@ -54,27 +54,48 @@ describe Merchant do
       @merchant = merchants(:ada)
       @order1 = Order.create(status: "pending")
       @order2 = Order.create(status: "pending")
+      @order3 = Order.create(status: "paid")
       @oi1 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order1.id)
       @oi2 = OrderItem.create(quantity: 3, product_id: products(:rings).id, order_id: @order2.id)
+      @oi3 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order3.id)
     end
 
     it "can calculate its total revenue" do
       revenue = @merchant.total_revenue
-      sum = @oi1.quantity * @oi1.product.price + @oi2.quantity * @oi2.product.price #50
-      expect(revenue).must_equal sum
+      expect(revenue).must_equal 70
     end
 
-    it "can calculate its total order for certain type of order (paid)" do
-      order1 = Order.create(status: "paid")
-      order2 = Order.create(status: "paid")
-      oi1 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order1.id)
-      oi2 = OrderItem.create(quantity: 3, product_id: products(:rings).id, order_id: @order2.id)
-      revenue = @merchant.total_revenue
-      sum = @oi1.quantity * @oi1.product.price + @oi2.quantity * @oi2.product.price #50
-      expect(revenue).must_equal sum
+    it "can calculate its total order for certain type of order" do
+      revenue = @merchant.total("pending")
+      expect(revenue).must_equal 50
     end
 
+    it "can calculate its total number of orders" do
+      number_orders = @merchant.total_orders
+      expect(number_orders).must_equal 3
+    end
 
+    it "can calculate its total number of orders even when multiple order items in same order" do
+      oi4 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order3.id)
+      number_orders = @merchant.total_orders
+      expect(number_orders).must_equal 3
+    end
+
+    it "can calculate its total number of orders for certain type of order" do
+      pending = merchant.number_orders("pending")
+      paid = merchant.number_orders("paid")
+      expect(pending).must_equal 2
+      expect(paid).must_equal 1
+    end
+
+    # it "can calculate its total number of orders when there is no orders" do
+
+    #   pending = merchant.number_orders("pending")
+    #   paid = merchant.number_orders("paid")
+    #   expect(pending).must_equal 2
+    #   expect(paid).must_equal 1
+    # end
+    
 
   end
 end
