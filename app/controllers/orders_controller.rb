@@ -4,39 +4,107 @@ class OrdersController < ApplicationController
     @orders = Order.all
   end
 
+  # this is the cart
   def show
-    @order = Order.find(params[:id])
-    render_404 unless @order
-
+    @order = Order.find_by(id: params[:id])
   end
 
-  def new
-    @order = Order.new
-  end
+  # def new
+  #   @order = Order.new
+  # end
 
+  # add_to_cart
   def create
-    # Instantiate a new Order variable passing in the order params 
-    @order = Order.new(order_params)
-    #  Then before saving, iterate through the current_cart's order_items 
-    #  and append them to the new order variable. 
-    # Then remember to assign the cart_id of the order_item to nil 
-    @current_cart.order_items.each do |item|
-      @order.order_items << item
-      item.cart_id = nil
+    if session[:order_id].nil?
+      @order = Order.create(status: 'pending')
+      session[:order_id] = @order.id
+    else
+      @order = Order.find_by(id: session[:order_id])
     end
-    # Save the order after appending all order_items from the cart
-    @order.save
-    # Destroy the cart and set the session[:cart_id] = nil as the 
-    # and cart has been fulfilled and the user can start shopping 
-    # for a new order. Redirect back to root_path
-    Cart.destroy(session[:cart_id])
-    session[:cart_id] = nil
-    redirect_to root_path
+
+    @product = Product.find(order_item_params[:product_id])
+
+    if @product.stock < order_item_params[:quantity].to_i
+      flash.now[:status] = :failure
+      flash.now[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
+      redirect_to product_path(@product)
+    else
+      if @order.order_items.map(&:product_id).include?(@product.id)
+        @order_item = @order.order_items.find_by(product_id: @product.id)
+        @order_item.quantity += order_item_params[:quantity].to_i
+      else
+        @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
+      end
+
+      if @order_item.save
+        flash[:status] = :success
+        flash[:result_text] = 'Successfully added your product to cart'
+        redirect_to product_path(@product)
+      else
+        flash.now[:status] = :failure
+        flash.now[:result_text] = 'Could not add a product to cart'
+        flash.now[:messages] = @order_item.errors.messages
+        redirect_to product_path(@product)
+      end
+    end
   end
-end
 
-private
+  # checkout
+  def edit
+    @order = Order.find_by(id: params[:id])
+    render_404 unless @order
+  end
 
-def order_params
-  params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+  # process payment
+  def update
+    @order.transaction do
+      @order.order_items.each do |item|
+        @purchased_product = Product.find_by(id: item.product_id)
+        next unless @purchased_product.stock > item.quantity.to_i
+
+        @purchased_product.stock -= item.quantity.to_i
+        unless @purchased_product.save
+          flash.now[:status] = :failure
+          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+          render :edit, status: :bad_request
+          return
+        end
+      end
+
+      @order.update_attributes(order_params)
+      if @order.save
+        @order.status = 'paid'
+        @order.save
+        flash[:status] = :success
+        flash[:result_text] = 'Purchase successful'
+        session[:order_id] = nil
+        redirect_to root_path
+      # redirect_to order_confirmation_path(@order)
+      else
+        flash.now[:status] = :failure
+        flash.now[:result_text] = 'Purchase not successful'
+        flash.now[:messages] = @order.errors.messages
+        render :edit, status: :bad_request
+      end
+    end
+  end
+
+  # Delete the whole cart
+  def destroy
+    @order.destroy
+    session[:order_id] = nil
+    flash[:status] = :success
+    flash[:message] = 'Your cart is now empty'
+    redirect_to products_path
+  end
+
+  private
+
+  def order_params
+    params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+  end
+
+  def order_item_params
+    params.require(:order_item).permit(:quantity, :product_id)
+  end
 end

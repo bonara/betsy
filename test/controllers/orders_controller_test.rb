@@ -13,7 +13,7 @@ describe OrdersController do
         order.destroy
       end
 
-      get orderss_path
+      get orders_path
 
       must_respond_with :success
     end
@@ -27,61 +27,25 @@ describe OrdersController do
     end
   end
 
-  describe 'create' do
-    it 'creates an order with valid data for a real category' do
-      new_order = {
+  describe "create" do
+    it "be able to create a new order" do
+      order_data = {
         order: {
-          status: 'Pending',
-          email: 'album@rest.com',
-          address: '1234 hot street',
-          name: 'John',
-          cc_name: 'John Wick',
-          cc_exp: 1122,
-          cc_num: '123454323456'
-              }
-                  }
+          status: "skydiving mars",
+          email: 1.5,
+          address: "adventure",
+          name: "my_name",
+          cc_name: "name",
+          cc_exp: 20190708,
+          cc_num: "1234321323432342",
+        }
+      }
 
       expect {
-        post orders_path, params: new_order
-      }.must_change 'Order.count', 1
+        post orders_path, params: order_data
+      }.must_change "Order.count", +1
 
-      new_order_id = Order.find_by(email: 'album@rest.com').id
-
-      must_respond_with :redirect
-      must_redirect_to order_path(new_order_id)
-    end
-
-    it 'renders bad_request and does not update the DB for bogus data' do
-      new_order = { 
-        order: {
-           status: nil, 
-           cc_exp: nil,
-           cc_num: nil
-           } 
-          }
-
-      expect {
-        post orders_path, params: bad_order
-      }.wont_change 'Order.count'
-
-      must_respond_with :bad_request
-    end
-
-    describe 'show' do
-      it 'succeeds for an existing order ID' do
-        get order_path(existing_order.id)
-
-        must_respond_with :success
-      end
-
-      it 'renders 404 not_found for a bogus order ID' do
-        destroyed_id = existing_order.id
-        existing_order.destroy
-
-        get order_path(destroyed_id)
-
-        must_respond_with :not_found
-      end
+      must_respond_with :ok
     end
   end
 end

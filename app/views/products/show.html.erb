@@ -1,14 +1,31 @@
 <section>
   <div>
     <h2> <%= @product.name %>  </h2>
-
+    <%= image_tag "#{@product.photo_url}", class: "product-image" %>
+  </div>
+  <div>
     <ul>
       <li><%= "price: #{@product.price}" %> </li>
       <li><%= "Description #{@product.description}" %> </li>
       <li><%= @product.stock %> </li>
+      <li><%= @product.status %> </li>
+      <li> Categories: 
+          <% @product.categories.each do |category| %> 
+        <%= link_to category.name, category_path(category.id) %>,
+         <% end %>
+       </li>
     </ul>
-    <% if session[:merchant_id] == @product.merchant_id%>
+    <% if @current_user == @product.merchant_id%>
       <%= link_to "Update", edit_product_path(@product), class: "btn btn-primary" %>
     <% end %>
+  </div>
+
+  <div>
+  <%= form_for OrderItem.new(product: @product), url: new_order_path do |f| %>
+    <%= f.label :quantity, "Qty" %>
+    <%= f.number_field :quantity, in: 1..10, value: 1 %>
+    <%= f.hidden_field :product_id %>
+    <%= f.submit "Add to cart", class: "btn btn-primary" %>
+  <% end %>
   </div>
 </section>

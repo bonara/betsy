@@ -23,6 +23,8 @@
         <th>Price</th>
         <th>Stock</th>
         <th>Rating</th>
+        <th>Status</th>
+        <th>Categories</th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +34,11 @@
           <td><%= product.price %></td>
           <td><%= product.stock %></td>
           <td>rating</td>
+          <td><%= product.status%></td>
+          <td> <% product.categories.each do |category| %> 
+                <%= link_to category.name, category_path(category.id) %>,
+            <% end %> 
+            </td>
         </tr>
       <% end %>
     </tbody>
@@ -53,7 +60,7 @@
     </thead>
     <tbody>
       <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: "complete").each do |order|%>
+        <% product.orders.where(status: ["complete", "sold"] ).each do |order|%>
           <% order.order_items.each do |order_item|%>
             <tr>
               <td><%= order.id %></td>
@@ -75,18 +82,19 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Incomplete</th>
+        <th>Pending</th>
+        <th>Paid</th>
         <th>Complete</th>
-        <th>Shipped</th>
         <th>Cancelled</th>
         <th>Total</th>
       </tr>
     </thead>
     <tbody>
       <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: "complete").each do |order|%>
+        <% product.orders.where(status: "paid").each do |order|%>
           <% order.order_items.each do |order_item|%>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
