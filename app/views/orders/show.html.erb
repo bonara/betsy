@@ -5,8 +5,16 @@
       <li>Item: <%= item.product.name %></li>
       <li>Price: <%= number_to_currency(item.product.price) %></li>
       <li> Quantity: <%= item.quantity %></li>
-      
-      <li><%= link_to "Update", order_item_path(item), method: :patch, class: "btn btn-light" %></li>
+
+      <div>
+      <%= form_for OrderItem.new(product: @product), url: update_cart_path do |f| %>
+        <%= f.label :quantity, "Qty" %>
+        <%= f.number_field :quantity, in: 1..10, value: 1 %>
+        <%= f.hidden_field :product_id %>
+        <%= f.submit "Update", class: "btn btn-primary" %>
+      <% end %>
+      </div>
+    
       <li><%= link_to "Remove item", order_item_path(item), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-light"%></li>
     </ul>
     <% end %>
