@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 2019_05_06_220753) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "merchant_id"
-    t.boolean "visible"
     t.string "status"
     t.index ["merchant_id"], name: "index_products_on_merchant_id"
   end

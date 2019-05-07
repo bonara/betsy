@@ -29,7 +29,12 @@ class OrdersController < ApplicationController
       flash[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
       redirect_back(fallback_location: root_path)
     else
-      @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
+      if @order.order_items.map(&:product_id).include?(@product.id)
+        @order_item = @order.order_items.find_by(product_id: @product.id)
+        @order_item.quantity += order_item_params[:quantity].to_i
+      else
+        @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
+      end
 
       if @order_item.save
         flash[:status] = :success
