@@ -28,19 +28,20 @@ class OrderItemsController < ApplicationController
   end
 
 # Delete specific order item
-def destroy
-  @order_item = OrderItem.find(params[:id])
-  @order_item.destroy
-  redirect_to order_path(@order)
-end
+  def destroy
+    @order_item = OrderItem.find_by(id: params[:id])
+    @order_item.destroy
+    redirect_back(fallback_location: root_path)
+  end
 
-private
+  private
 
-def order_item_params
-  params.require(:order_item).permit(:quantity, :product_id, :order_id)
-end
+  def order_item_params
+    params.require(:order_item).permit(:quantity, :product_id, :order_id)
+  end
 
-def find_order_item
-  @order_item = OrderItem.find_by(id: params[:id])
-  render_404 unless @order_item
+  def find_order_item
+    @order_item = OrderItem.find_by(id: params[:id])
+    render_404 unless @order_item
+  end
 end

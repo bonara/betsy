@@ -14,10 +14,11 @@
   </div>
 
   <div>
-  <%= form_for [@order_items] do |f| %>
-    <%= f.text_field :quantity %>
+  <%= form_for OrderItem.new(product: @product), url: new_order_path do |f| %>
+    <%= f.label :quantity, "Qty" %>
+    <%= f.number_field :quantity, in: 1..10, value: 1 %>
     <%= f.hidden_field :product_id %>
-    <%= f.submit "Add #{@product.name} to cart", class: "btn btn-primary" %>
+    <%= f.submit "Add to cart", class: "btn btn-primary" %>
   <% end %>
   </div>
 </section>
