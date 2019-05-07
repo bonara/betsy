@@ -23,6 +23,8 @@
         <th>Price</th>
         <th>Stock</th>
         <th>Rating</th>
+        <th>Status</th>
+        <th>Categories</th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +34,11 @@
           <td><%= product.price %></td>
           <td><%= product.stock %></td>
           <td>rating</td>
+          <td><%= product.status%></td>
+          <td> <% product.categories.each do |category| %> 
+                <%= link_to category.name, category_path(category.id) %>,
+            <% end %> 
+            </td>
         </tr>
       <% end %>
     </tbody>

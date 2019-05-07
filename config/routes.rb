@@ -2,8 +2,8 @@
 
 Rails.application.routes.draw do
   root 'products#root'
-  resources :products
-  resources :merchants, only: %i[index show]
+  resources :products 
+  resources :merchants, only: %i[index show] 
   resources :categories
   resources :orders
   resources :order_items
