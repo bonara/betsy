@@ -19,6 +19,7 @@ describe Order do
 
   describe 'total' do
     it 'calculate total for an order' do
+      
     end
   end
 

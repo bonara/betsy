@@ -82,19 +82,23 @@ describe Merchant do
     end
 
     it "can calculate its total number of orders for certain type of order" do
-      pending = merchant.number_orders("pending")
-      paid = merchant.number_orders("paid")
+      pending = @merchant.number_orders("pending")
+      paid = @merchant.number_orders("paid")
       expect(pending).must_equal 2
       expect(paid).must_equal 1
     end
 
-    # it "can calculate its total number of orders when there is no orders" do
+    it "can calculate revnue of orders when there is no order items" do
+      OrderItem.destroy_all
+      revenue = @merchant.total_revenue
+      expect(revenue).must_equal 0
+    end
 
-    #   pending = merchant.number_orders("pending")
-    #   paid = merchant.number_orders("paid")
-    #   expect(pending).must_equal 2
-    #   expect(paid).must_equal 1
-    # end
+    it "can calculate revnue of orders when there is no order items" do
+      OrderItem.destroy_all
+      number = @merchant.total_orders
+      expect(number).must_equal 0
+    end
     
 
   end
