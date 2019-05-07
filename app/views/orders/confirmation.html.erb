@@ -1,0 +1,37 @@
+<section class="main-body">
+
+<section>
+    <h1>Thanks for placing an order!</h1>
+</section>
+
+<section class="status">
+  <p>
+    Order Status: <%= %> 
+  </p>
+</section>
+
+<section class="purchase description">
+<% @.each do |x| %>
+  <p>
+    Trip: <%= %><br>
+    Trip Cost: <%= %><br>
+    Trip Quantity: <%= %><br>
+    Subtotal: <%= %> 
+  </p>
+</section>
+
+<section class="order checkout description">
+  <p>
+    Total Cost: <%= %><br>
+    Order ID: <%= @order.id %><br>
+    Order Received at: <%= %>
+  </p>
+</section>
+
+<section>
+    <h3>Bon Voyage!</h3>
+</section>
+
+<nav class="navbar">
+  <%=link_to "Home", root_path %>
+</nav>
