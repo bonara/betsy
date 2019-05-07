@@ -2,18 +2,20 @@
   <%  if @category.products%>
     <% @category.products.each do |product| %>
       <% if product.status == "listed"%>
-    <ul>
-      <li><%= "#{product.name}" %> </li>
-      <li><%= "price: #{product.price}" %> </li>
-      <li><%= "Description: #{product.description}" %> </li>
-      <li><%= product.stock %> </li>
-       <li> Categories: 
-          <% product.categories.each do |category| %> 
-        <%= link_to category.name, category_path(category.id) %>,
-         <% end %>
-       </li>
-    </ul>
-    <% end %>
+        <ul>
+          <li><%= image_tag "#{product.photo_url}", class: "product-image" %></li>
+          <li> <%= link_to "#{product.name}", product_path(product) %> </li>
+          <li><%= "Price: $#{sprintf("%.2f",product.price)}" %> </li>
+          <li>
+            <%= form_for OrderItem.new(product: @product), url: new_order_path do |f| %>
+            <%= f.label :quantity, "Qty" %>
+            <%= f.number_field :quantity, in: 1..10, value: 1 %>
+            <%= f.hidden_field :product_id, value: product.id %>
+            <%= f.submit "Add to cart", class: "btn btn-primary" %>
+            <% end %>
+          </li>
+        </ul>
+      <% end %>
     <% end %>
   <% end %>
 </section>

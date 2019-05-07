@@ -25,21 +25,21 @@ class OrdersController < ApplicationController
     @product = Product.find(order_item_params[:product_id])
 
     if @product.stock < order_item_params[:quantity].to_i
-      flash.now[:status] = :failure
-      flash.now[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
-      redirect_to product_path(@product)
+      flash[:status] = :failure
+      flash[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
+      redirect_back(fallback_location: root_path)
     else
       @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
 
       if @order_item.save
         flash[:status] = :success
         flash[:result_text] = 'Successfully added your product to cart'
-        redirect_to product_path(@product)
+        redirect_back(fallback_location: root_path)
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Could not add a product to cart'
         flash.now[:messages] = @order_item.errors.messages
-        redirect_to product_path(@product)
+        redirect_back(fallback_location: root_path)
       end
     end
   end
