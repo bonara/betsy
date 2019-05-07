@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :merchants, only: %i[index show]
   resources :categories
   resources :orders
-  
+
   get 'merchants/:id/dashboard', to: 'merchants#dashboard', as: 'dashboard'
   get '/auth/github', as: 'github_login'
   get 'auth/:provider/callback', to: 'merchants#create', as: 'auth_callback'

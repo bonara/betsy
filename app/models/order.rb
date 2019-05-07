@@ -3,3 +3,10 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
 end
 
+validates :cc_name, presence: true,  on: :update
+validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :update }
+validates :cc_num, presence: true, format: { with: /\A\d+\z/ , on: :update }
+validates :cvv, presence: true, numericality: {greater_than_or_equal_to: 0, only_integer: true, on: :update }
+validates :address, presence: true, on: :update
+
+end
