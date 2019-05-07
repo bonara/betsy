@@ -16,4 +16,29 @@ class Merchant < ApplicationRecord
     merchant
   end
 
+  def total_revenue
+    sum = 0
+    self.products.each do |product|
+      order_items = OrderItem.where(product_id: product.id)
+        order_items.each do |item|
+          sum = sum + item.total
+        end
+    end
+    return sum
+  end
+
+
+
+  def total_orders
+    orders = []
+    self.products.each do |product|
+      order_items = OrderItem.where(product_id: product.id)
+        order_items.each do |item|
+          orders.push(item.order)
+        end
+    end
+    total = orders.uniq.length
+    return total
+  end
+
 end
