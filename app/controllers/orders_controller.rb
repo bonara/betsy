@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   skip_before_action :require_login
 
-  def index
-    @orders = Order.all
-  end
-
   # this is the cart
-  def show
-    @order_id = params[:id]
-    @order_items = OrderItems.all
-    @order_order_items = @order_items.where(order_id: @order_id)
+  def index
+    @order = Order.find_by(id: session[:order_id])
   end
 
-  # def new
-  #   @order = Order.new
-  # end
+  def new
+    @order = Order.find_by(id: session[:order_id])
+  end
+
+  def show
+    @order_order_items = OrderItem.where(order_id: session[:order_id])
+  end
 
   # add_to_cart
   def create
@@ -25,26 +25,31 @@ class OrdersController < ApplicationController
       @order = Order.find_by(id: session[:order_id])
     end
 
-    @product = Product.find(order_item_params[:product_id])
+    @product = Product.find(params[:product][:product_id])
 
-    if @product.stock < order_item_params[:quantity]
+    if @product.stock < params[:quantity].to_i
       flash.now[:status] = :failure
       flash.now[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
       redirect_to product_path(@product)
     else
-      @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
+      if @order.order_items.map(&:product_id).include?(@product.id)
+        @order_item = @order.order_items.find_by(product_id: @product.id)
+        @order_item.quantity += 1
+      else
+        @order_item = OrderItem.new(product_id: @product.id, order_id: @order.id, quantity: params[:quantity].to_i)
+      end
 
       if @order_item.save
-        @product.stock -= order_item_params[:quantity]
+        @product.stock -= params[:quantity].to_i
         @product.save
         flash[:status] = :success
         flash[:result_text] = 'Successfully added your product to cart'
-        redirect_to product_path(@product)
+        redirect_to show_cart_path
       else
         flash.now[:status] = :failure
         flash[:result_text] = 'Could not add a product to cart'
         flash[:messages] = @order_item.errors.messages
-        redirect_to product_path(@product)
+        redirect_to products_path
       end
     end
   end
@@ -58,11 +63,12 @@ class OrdersController < ApplicationController
 
   # process payment
   def update
+    @order = Order.find_by(id: session[:order_id])
     if @order.update(order_params)
       @order.status = 'complete'
       flash[:status] = :success
       flash[:message] = 'Purchase successful'
-      redirect_to order_confirmation_path(@order)
+      redirect_to products_path
     else
       flash.now[:status] = :error
       flash.now[:message] = 'Purchase not successful'
@@ -83,9 +89,5 @@ end
 private
 
 def order_params
-  params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
-end
-
-def order_item_params
-  params.require(:order_item).permit(:quantity, :product_id)
+  params.permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
 end

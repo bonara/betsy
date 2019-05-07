@@ -4,7 +4,12 @@
  <% @products.each do |product| %>
   <li><%= image_tag "#{product.photo_url}", class: "product-image" %></li>
   <li> <%= link_to "#{product.name}", product_path(product) %> </li>
-  <li> <%= button_to "Add #{product.name} to cart", new_order_path%> </li>
-
- <% end %>
+  <div>
+  <%= form_for [product], url: orders_path, method: :post do  |f| %>
+    Quantity: <input type="number" name="quantity" value="1"><br>
+    <%= f.hidden_field :product_id, value: product.id %>
+    <%= f.submit "Add #{product.name} to cart", class: "btn btn-primary" %>
+  <% end %>
+  </div>
+  <% end %>
 </ul>

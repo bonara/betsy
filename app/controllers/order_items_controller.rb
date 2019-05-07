@@ -1,6 +1,7 @@
 class OrderItemsController < ApplicationController
   skip_before_action :require_login
   before_action :find_order_item, only: %i[show edit update]
+  
   def index
     @order_items = OrderItem.all
   end
@@ -27,11 +28,28 @@ class OrderItemsController < ApplicationController
     @order_item = OrderItem.new
   end
 
-# Delete specific order item
-def destroy
-  @order_item = OrderItem.find(params[:id])
-  @order_item.destroy
-  redirect_to order_path(@order)
+  # Delete specific order item
+  def destroy
+    @order_item = OrderItem.find_by(id: params[:id])
+    @order_item.destroy
+    redirect_to show_cart_path
+  end
+
+  def add_quantity
+    @order_item = OrderItem.find(params[:id])
+    @order_item.quantity += 1
+    @order_item.save
+    redirect_to show_cart_path
+  end
+
+  def reduce_quantity
+    @order_item = OrderItem.find(params[:id])
+    if @order_item.quantity > 1
+      @order_item.quantity -= 1
+    end
+    @order_item.save
+    redirect_to show_cart_path
+  end
 end
 
 private
