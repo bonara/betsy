@@ -1,53 +1,73 @@
 class OrdersController < ApplicationController
   skip_before_action :require_login
-  
+  before_action :order
   def index
     @orders = Order.all
   end
 
   # this is the cart
   def show
-    @order_id = params[:id]
-    @order_items = OrderItems.all
-    @order_order_items = @order_items.where(order_id: order_id)
+    @order = Order.find_by(id: params[:id])
   end
 
-  def new
-    @order = Order.new
-  end
+  # def new
+  #   @order = Order.new
+  # end
 
   # add_to_cart
   def create
-    if session[:order_id] == nil
+    if session[:order_id].nil?
       @order = Order.create(status: 'pending')
       session[:order_id] = @order.id
+    else
+      @order = Order.find_by(id: session[:order_id])
     end
 
-    @order_item = OrderItem.create(
-      order_id: @order.id,
-      product_id: params[:product_id],
-      quantity: params[:quanity]
-    )
+    @product = Product.find(order_item_params[:product_id])
 
+    if @product.stock < order_item_params[:quantity].to_i
+      flash.now[:status] = :failure
+      flash.now[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
+      redirect_to product_path(@product)
+    else
+      @order_item = OrderItem.new(order_item_params.merge(order_id: @order.id))
+
+      if @order_item.save
+        @product.stock -= order_item_params[:quantity].to_i
+        @product.save
+        flash[:status] = :success
+        flash[:result_text] = 'Successfully added your product to cart'
+        redirect_to product_path(@product)
+      else
+        flash.now[:status] = :failure
+        flash[:result_text] = 'Could not add a product to cart'
+        flash[:messages] = @order_item.errors.messages
+        redirect_to product_path(@product)
+      end
+    end
   end
 
   # checkout
   def edit
-    order_id = params[:id]
-    @order = Order.find_by(id: order_id)
-    redirect_to order_path if @order.nil?
+    @order = Order.find_by(id: params[:id])
+    render_404 unless @order
   end
 
   # process payment
   def update
-    if @order.update(order_params)
-      @order.status = 'complete'
+    @order.update_attributes(order_params)
+    if @order.save
+      @order.status = 'paid'
+      @order.save
       flash[:status] = :success
-      flash[:message] = 'Purchase successful'
-      redirect_to order_confirmation_path(@order)
+      flash[:result_text] = 'Purchase successful'
+      session[:order_id] = nil
+      redirect_to root_path
+      # redirect_to order_confirmation_path(@order)
     else
-      flash.now[:status] = :error
-      flash.now[:message] = 'Purchase not successful'
+      flash.now[:status] = :failure
+      flash.now[:result_text] = 'Purchase not successful'
+      flash.now[:messages] = @order.errors.messages
       render :edit, status: :bad_request
     end
   end
@@ -60,7 +80,6 @@ class OrdersController < ApplicationController
     flash[:message] = 'Your cart is now empty'
     redirect_to products_path
   end
-
 end
 
 private

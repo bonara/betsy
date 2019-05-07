@@ -10,6 +10,11 @@ class ApplicationController < ActionController::Base
     @current_user ||= Merchant.find_by(id: session[:merchant_id]) if session[:merchant_id]
   end
 
+  # find if there is a cart
+  def order
+    @order ||= Order.find_by(id: session[:order_id]) if session[:order_id]
+  end
+
   def require_login
     if current_user.nil?
       flash[:error] = 'You must be logged in to view this section'

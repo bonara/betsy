@@ -63,7 +63,11 @@
             </li>
             <% end %>     
             <li class="nav-item">
+              <% if @order%>
+                <%= link_to "My Cart", order_path(@order) %>
+              <% else %>
                 <%= link_to "My Cart", orders_path %>
+              <% end %>
             </li>
           </ul>
         </div>

@@ -1,33 +1,33 @@
 <%= form_for(@order) do |f| %>
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name, required: true, autofocus: true %>
-  </p>
-  <p>
-    <%= f.label :email %><br>
-    <%= f.email_field :email %>
-  </p>
-  <p>
-    <%= f.label :address %><br>
-    <%= f.text_area :address %>
-  </p>
-    <p>
-    <%= f.label :name %><br>
-    <%= f.text_area :name %>
-  </p>
-  <p>
-    <%= f.label :cc_name %><br>
-    <%= f.text_area :cc_name %>
-  </p>
-  <p>
-    <%= f.label :cc_exp %><br>
-    <%= f.text_area :cc_exp %>
-  </p>
-    <p>
-    <%= f.label :cc_num %><br>
-    <%= f.text_area :cc_num %>
-  </p>
-  <p>
-    <%= f.submit %>
-  </p>
-<% end
+  <div class="form-group">
+    <%= f.label :name, "Name" %>
+    <%= f.text_field :name, required: true, autofocus: true, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :email, "Email Address" %>
+    <%= f.email_field :email, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :address, "Shipping Address" %>
+    <%= f.text_area :address, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :name, "Cardholder's Name" %>
+    <%= f.text_area :name, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :cc_name, "Card Number" %>
+    <%= f.number_field :cc_name, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :cc_exp, "Expiry Date"%>
+    <%= f.date_field :cc_exp, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :cc_num, "Security Code" %>
+    <%= f.number_field :cc_num, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.submit "Submit Order", class: "btn btn-primary" %>
+  </div>
+<% end %>
