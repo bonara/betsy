@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 describe Merchant do
   # describe 'relations' do
@@ -49,19 +49,20 @@ describe Merchant do
   #     merchant2.errors.messages.must_include :email
   #   end
 
-    describe "revenue methods" do
-      it "can calculate its total order sum" do
-        merchant = merchants(:ada)
-        OrderItem.create(quanitity: 2)
-        revenue = merchant.total_revenue
-        expect(revenue).must_be_kind_of Integer
-      end
+  describe "revenue methods" do
+    before do
+      @merchant = merchants(:ada)
+      @order1 = Order.create(status: "pending")
+      @order2 = Order.create(status: "pending")
+      @oi1 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order1.id)
+      @oi2 = OrderItem.create(quantity: 3, product_id: products(:rings).id, order_id: @order2.id)
     end
 
+    it "can calculate its total order sum" do
+      revenue = @merchant.total_revenue
+      sum = @oi1.quantity * @oi1.product.price + @oi2.quantity * @oi2.product.price #50
+      expect(revenue).must_equal sum
+    end
 
-
-
-    
-
-
+  end
 end
