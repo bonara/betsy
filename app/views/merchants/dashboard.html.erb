@@ -90,19 +90,21 @@
       </tr>
     </thead>
     <tbody>
-      <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: "paid").each do |order|%>
-          <% order.order_items.each do |order_item|%>
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>$<%= @merchant.total("pending")%></td>
+              <td>$<%= @merchant.total("paid")%></td>
+              <td>$<%= @merchant.total("complete")%></td>
+              <td>$<%= @merchant.total("cancelled")%></td>
+              <td>$<%= @merchant.total_revenue %></td>
             </tr>
-          <% end %>
-        <% end %>
-      <% end %>
+            <tr>
+              <td><%= @merchant.number_orders("pending")%></td>
+              <td><%= @merchant.number_orders("paid")%></td>
+              <td><%= @merchant.number_orders("complete")%></td>
+              <td><%= @merchant.number_orders("cancelled")%></td>
+              <td><%= @merchant.total_orders %></td>
+            </tr>
+        
     </tbody>
   </table>
 </section>

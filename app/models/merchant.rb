@@ -27,6 +27,19 @@ class Merchant < ApplicationRecord
     return sum
   end
 
+  def total(type)
+    sum = 0
+    self.products.each do |product|
+      order_items = OrderItem.where(product_id: product.id)
+        order_items.each do |item|
+          if item.order.status == type
+            sum = sum + item.total
+          end
+        end
+    end
+    return sum
+
+  end
 
 
   def total_orders
@@ -35,6 +48,20 @@ class Merchant < ApplicationRecord
       order_items = OrderItem.where(product_id: product.id)
         order_items.each do |item|
           orders.push(item.order)
+        end
+    end
+    total = orders.uniq.length
+    return total
+  end
+
+  def number_orders(type)
+    orders = []
+    self.products.each do |product|
+      order_items = OrderItem.where(product_id: product.id)
+        order_items.each do |item|
+          if item.order.status == type
+            orders.push(item.order)
+          end
         end
     end
     total = orders.uniq.length
