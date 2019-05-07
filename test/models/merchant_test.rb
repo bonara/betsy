@@ -58,11 +58,23 @@ describe Merchant do
       @oi2 = OrderItem.create(quantity: 3, product_id: products(:rings).id, order_id: @order2.id)
     end
 
-    it "can calculate its total order sum" do
+    it "can calculate its total revenue" do
       revenue = @merchant.total_revenue
       sum = @oi1.quantity * @oi1.product.price + @oi2.quantity * @oi2.product.price #50
       expect(revenue).must_equal sum
     end
+
+    it "can calculate its total order for certain type of order (paid)" do
+      order1 = Order.create(status: "paid")
+      order2 = Order.create(status: "paid")
+      oi1 = OrderItem.create(quantity: 2, product_id: products(:rings).id, order_id: @order1.id)
+      oi2 = OrderItem.create(quantity: 3, product_id: products(:rings).id, order_id: @order2.id)
+      revenue = @merchant.total_revenue
+      sum = @oi1.quantity * @oi1.product.price + @oi2.quantity * @oi2.product.price #50
+      expect(revenue).must_equal sum
+    end
+
+
 
   end
 end
