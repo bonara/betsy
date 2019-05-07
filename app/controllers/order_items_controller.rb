@@ -10,16 +10,21 @@ class OrderItemsController < ApplicationController
   def edit; end
 
   def update
-    @order_item.update_attributes(order_item_params)
-    if @order_item.save
-      flash.now[:status] = :success
-      flash.now[:result_text] = "Successfully updated #{@order_item.id}"
-      render
-    else
-      flash.now[:status] = :failure
-      flash.now[:result_text] = 'Could not update product'
-      flash.now[:messages] = @order_item.errors.messages
-      render :edit, status: :not_found
+    @order_item = OrderItem.find(params[:id])
+    @product = Product.find(order_item_params[:product_id])
+
+    if @product.stock > order_item_params[:quantity].to_i
+      @order_item.quantity = order_item_params[:quantity].to_i
+      if @order_item.save
+        flash.now[:status] = :success
+        flash.now[:result_text] = "Successfully updated #{@order_item.id} quantity"
+        redirect_to show_cart_path
+      else
+        flash.now[:status] = :failure
+        flash.now[:result_text] = 'Could not update product'
+        flash.now[:messages] = @order_item.errors.messages
+        render :edit, status: :not_found
+      end
     end
   end
 
