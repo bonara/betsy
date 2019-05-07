@@ -46,11 +46,12 @@
 </section>
 
 <section>
-  <h3>Sold Tours</h3>
+  <h3>Order Fulfillment</h3>
   <table class="table">
     <thead>
       <tr>
         <th>Order#</th>
+        <th>Date</th>
         <th>Item</th>
         <th>Price</th>
         <th>Quantity</th>
@@ -60,10 +61,11 @@
     </thead>
     <tbody>
       <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: ["complete", "sold"] ).each do |order|%>
+        <% product.orders.each do |order|%>
           <% order.order_items.each do |order_item|%>
             <tr>
               <td><%= order.id %></td>
+              <td><%= order.created_at %></td>
               <td><%= link_to order_item.product.name, product_path(order_item.product) %></td>
               <td><%= order_item.product.price %></td>
               <td><%= order_item.quantity %></td>
@@ -98,11 +100,11 @@
               <td>$<%= @merchant.total_revenue %></td>
             </tr>
             <tr>
-              <td><%= @merchant.number_orders("pending")%></td>
-              <td><%= @merchant.number_orders("paid")%></td>
-              <td><%= @merchant.number_orders("complete")%></td>
-              <td><%= @merchant.number_orders("cancelled")%></td>
-              <td><%= @merchant.total_orders %></td>
+              <td><%= @merchant.number_orders("pending")%> orders </td>
+              <td><%= @merchant.number_orders("paid")%> orders </td>
+              <td><%= @merchant.number_orders("complete")%> orders </td>
+              <td><%= @merchant.number_orders("cancelled")%> orders </td>
+              <td><%= @merchant.total_orders %> orders </td>
             </tr>
         
     </tbody>
