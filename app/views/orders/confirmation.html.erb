@@ -1,0 +1,37 @@
+<section class="main-body">
+
+<section>
+    <h1>Thanks for placing an order!</h1>
+</section>
+
+<section class="status">
+  <p>
+    Order Status: <%= @order.status.capitalize %> 
+  </p>
+</section>
+
+<section class="purchase description">
+<% @order.order_items each do |order item| %>
+  <p>
+    Trip: <%= "#{order_item.product.name}" %><br>
+    Trip Link: <%= link_to "#{order_item.product.name.capitalize}", product_path(order_item.product.id) %>
+    Trip Quantity: <%= order_item.quantity %><br> 
+    Subtotal: <%= order_item.total %>
+  </p>
+</section>
+
+<section class="order checkout description">
+  <p>
+    Total Cost: <%= order.sub_total %>
+    Order ID: <%= @order.id %><br>
+    Order Received at: <%= @order.updated_at %>
+  </p>
+</section>
+
+<section>
+    <h3>Bon Voyage!</h3>
+</section>
+
+<nav class="navbar">
+  <%=link_to "Home", root_path %>
+</nav>
