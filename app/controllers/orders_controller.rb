@@ -11,17 +11,12 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
   end
 
-<<<<<<< HEAD
-  def new
-    @order = Order.new
-  end
-=======
   def new; end
->>>>>>> master
 
   # add_to_cart
   def create
     if session[:order_id].nil?
+
       @order = Order.create(status: 'pending')
       session[:order_id] = @order.id
     else
