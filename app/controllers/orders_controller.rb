@@ -11,9 +11,13 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
   end
 
+<<<<<<< HEAD
   def new
     @order = Order.new
   end
+=======
+  def new; end
+>>>>>>> master
 
   # add_to_cart
   def create
@@ -27,9 +31,9 @@ class OrdersController < ApplicationController
     @product = Product.find(order_item_params[:product_id])
 
     if @product.stock < order_item_params[:quantity].to_i
-      flash.now[:status] = :failure
-      flash.now[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
-      redirect_to product_path(@product)
+      flash[:status] = :failure
+      flash[:result_text] = 'You have exceeded number of items in stock!'
+      redirect_back(fallback_location: root_path)
     else
       if @order.order_items.map(&:product_id).include?(@product.id)
         @order_item = @order.order_items.find_by(product_id: @product.id)
@@ -41,12 +45,12 @@ class OrdersController < ApplicationController
       if @order_item.save
         flash[:status] = :success
         flash[:result_text] = 'Successfully added your product to cart'
-        redirect_to product_path(@product)
+        redirect_back(fallback_location: root_path)
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Could not add a product to cart'
         flash.now[:messages] = @order_item.errors.messages
-        redirect_to product_path(@product)
+        redirect_back(fallback_location: root_path)
       end
     end
   end
@@ -79,9 +83,8 @@ class OrdersController < ApplicationController
         @order.save
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
-        session[:order_id] = nil
-        redirect_to root_path
-      # redirect_to order_confirmation_path(@order)
+        redirect_to confirmation_path
+
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Purchase not successful'
@@ -91,13 +94,22 @@ class OrdersController < ApplicationController
     end
   end
 
-  # Delete the whole cart
-  def destroy
-    @order.destroy
+  def confirmation
+    @paid_order = Order.find_by(id: params[:order_id])
+    if @paid_order
+      session[:paid_order] = nil
+    else
+      flash[:warning] = 'Your order not go through. Please try again.'
+    end
     session[:order_id] = nil
+  end
+
+  # Empty the cart
+  def destroy
+    @order.order_items.destroy_all
     flash[:status] = :success
-    flash[:message] = 'Your cart is now empty'
-    redirect_to products_path
+    flash[:result_text] = 'Your cart is now empty'
+    redirect_back(fallback_location: root_path)
   end
 
   def confirmation

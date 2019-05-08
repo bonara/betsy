@@ -4,17 +4,25 @@
     <ul>
       <li>Item: <%= item.product.name %></li>
       <li>Price: <%= number_to_currency(item.product.price) %></li>
-      <li> Quantity: <%= item.quantity %></li>
-      
-      <li><%= link_to "Update", order_item_path(item), method: :patch, class: "btn btn-light" %></li>
+      <div>
+      <%= form_for OrderItem.update(product: @product), url: order_item_path(item) do |f| %>
+        <%= f.label :quantity, "Qty" %>
+        <%= f.number_field :quantity, in: 1..10, value: item.quantity %>
+        <%= f.hidden_field :product_id, value: item.id %>
+        <%= f.submit "Update", class: "btn btn-primary" %>
+      <% end %>
+      </div>
+    
       <li><%= link_to "Remove item", order_item_path(item), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-light"%></li>
     </ul>
     <% end %>
-  <%= link_to "Proceed to checkout", edit_order_path(@order), class: "btn btn-primary" %>
-  <%= link_to "Empty Cart", order_path(@order), method: :delete, data:{confirm: 'Are your sure?'}, class: "btn btn-danger" %>
-
-  <% else %>
+    <h3>Sub total: <%= number_to_currency(@order.sub_total) %></h3>
+    <% unless @order.order_items.empty?%>
+      <%= link_to "Proceed to checkout", edit_order_path(@order), class: "btn btn-primary" %>
+      <%= link_to "Empty Cart", order_path(@order), method: :delete, data:{confirm: 'Are your sure?'}, class: "btn btn-danger" %>
+    <% else %>
       <div>Your cart is empty</div>
+    <% end %>
   <% end %>
 
 

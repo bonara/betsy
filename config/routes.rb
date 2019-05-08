@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
   resources :merchants, only: %i[index show]
   resources :categories
+  get '/orders/confirmation', to: 'orders#confirmation', as: 'confirmation'
   resources :orders
   resources :order_items
 
@@ -17,4 +18,5 @@ Rails.application.routes.draw do
   delete '/logout', to: 'merchants#destroy', as: 'logout'
 
   post '/orders/new', to: 'orders#create'
+  # post '/orders/:id/update', to: 'order_items#update', as: 'update_cart'
 end

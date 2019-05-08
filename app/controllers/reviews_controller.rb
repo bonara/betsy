@@ -5,7 +5,8 @@ class ReviewsController < ApplicationController
   before_action :find_product, only: [:new]
 
   def new
-    if session[:user_id] == @product.user_id
+    if session[:user_id] == @product.merchant_id
+      flash[:status] = :failure
       flash[:message] = 'You cannot review your own product.'
       redirect_to products_path
       nil
@@ -20,6 +21,7 @@ class ReviewsController < ApplicationController
       review_params
     )
     if @review.save
+      flash[:status] = :success
       flash[:result_text] = 'Your review was successfully created.'
       redirect_to product_path(@product.id)
 

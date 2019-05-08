@@ -14,11 +14,11 @@
   
   <div class="form-group" >
     <%= f.label :cc_name, "Cardholder's Name"  %>
-    <%= f.number_field :cc_name, class: "form-control" %>
+    <%= f.text_field :cc_name, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.label :cc_num, "Card Number" %>
-    <%= f.number_field :cc_num, class: "form-control" %>
+    <%= f.text_field :cc_num, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.label :cc_exp, "Expiry Date"%>
@@ -28,3 +28,4 @@
     <%= f.submit "Submit Order", class: "btn btn-primary" %>
   </div>
 <% end %>
+
