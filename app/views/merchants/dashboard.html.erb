@@ -48,6 +48,7 @@
         <% product.orders.each do |order|%>
           <% order.order_items.where(product_id: product.id).each do |order_item|%>
             <tr>
+              <td><%= link_to order.id, confirmation_path(order.id) %></td>
               <td><%= order.id %></td>
               <td><%= order.created_at %></td>
               <td><%= link_to order_item.product.name, product_path(order_item.product) %></td>

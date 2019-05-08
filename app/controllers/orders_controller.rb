@@ -78,7 +78,7 @@ class OrdersController < ApplicationController
         @order.save
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
-        redirect_to confirmation_path
+        redirect_to confirmation_path(@order.id)
 
       else
         flash.now[:status] = :failure
@@ -90,12 +90,12 @@ class OrdersController < ApplicationController
   end
 
   def confirmation
-    @paid_order = Order.find_by(id: params[:order_id])
-    if @paid_order
-      session[:paid_order] = nil
-    else
-      flash[:warning] = 'Your order not go through. Please try again.'
-    end
+    @paid_order = Order.find_by(id: params[:id])
+    # if @paid_order == nil
+    # #   session[:paid_order] = nil
+    # # else
+    #   flash[:warning] = 'Your order not go through. Please try again.'
+    # end
     session[:order_id] = nil
   end
 
