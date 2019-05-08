@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
   resources :merchants, only: %i[index show]
   resources :categories
-  get '/orders/confirmation', to: 'orders#confirmation', as: 'confirmation'
+  get '/orders/:id/confirmation', to: 'orders#confirmation', as: 'confirmation'
   resources :orders
   resources :order_items
 
