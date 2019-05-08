@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   skip_before_action :require_login
   def index
@@ -63,12 +65,12 @@ class OrdersController < ApplicationController
         next unless @purchased_product.stock > item.quantity.to_i
 
         @purchased_product.stock -= item.quantity.to_i
-        unless @purchased_product.save
-          flash.now[:status] = :failure
-          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
-          render :edit, status: :bad_request
-          return
-        end
+        next if @purchased_product.save
+
+        flash.now[:status] = :failure
+        flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+        render :edit, status: :bad_request
+        return
       end
 
       @order.update_attributes(order_params)
@@ -96,6 +98,16 @@ class OrdersController < ApplicationController
     flash[:status] = :success
     flash[:message] = 'Your cart is now empty'
     redirect_to products_path
+  end
+
+  def confirmation
+    @paid_order = Order.find_by(id: params[:order_id])
+
+    if @paid_order
+      session[:paid_order] = nil
+    else
+      flash[:warning] = 'Your order not go through. Please try again.'
+    end
   end
 
   private

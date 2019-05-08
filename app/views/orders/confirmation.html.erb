@@ -6,23 +6,23 @@
 
 <section class="status">
   <p>
-    Order Status: <%= %> 
+    Order Status: <%= @order_status.capitalize %> 
   </p>
 </section>
 
 <section class="purchase description">
-<% @.each do |x| %>
+<% @order.each do |product| %>
   <p>
-    Trip: <%= %><br>
-    Trip Cost: <%= %><br>
-    Trip Quantity: <%= %><br>
-    Subtotal: <%= %> 
+    Trip: <%= "#{order.product.name}" %><br>
+    Trip Link: <%= link_to "#{order.product.name.capitalize}", product_path(item.product.id) %>
+    Trip Quantity: <%= @order_item.quantity %><br>
+    Subtotal: <%= @order.total %> 
   </p>
 </section>
 
 <section class="order checkout description">
   <p>
-    Total Cost: <%= %><br>
+    Total Cost: <%= @total %><br>
     Order ID: <%= @order.id %><br>
     Order Received at: <%= @order.datetime %>
   </p>
