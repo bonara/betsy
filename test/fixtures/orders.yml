@@ -1,6 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-moon:
+order_one:
   status: paid
   email: test@email.com
   address: 1600 road to nowhere
@@ -9,7 +9,7 @@ moon:
   cc_exp: 2019-05-01
   cc_num: 1234 2222 3333 2345
 
-mars:
+order_two:
   status: paid
   email: read@test.com
   address: 120 my house
@@ -18,7 +18,7 @@ mars:
   cc_exp: 2019-05-01
   cc_num: 0987 2536 4826 3749
 
-jupiter:
+order_three:
   status: pending
   email: nil
   address: nil
