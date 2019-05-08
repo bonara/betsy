@@ -8,5 +8,13 @@ class Order < ApplicationRecord
   validates :cc_num, presence: true, on: :update
   validates :cc_name, presence: true, on: :update
   validates :cc_exp, presence: true, on: :update
+
+  def sub_total
+    sum = 0
+    self.order_items.each do |order_item|
+      sum+= order_item.total_price
+    end
+    return sum
+  end
   
 end
