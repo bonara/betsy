@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   skip_before_action :require_login
   def index
@@ -61,12 +63,12 @@ class OrdersController < ApplicationController
         next unless @purchased_product.stock > item.quantity.to_i
 
         @purchased_product.stock -= item.quantity.to_i
-        unless @purchased_product.save
-          flash.now[:status] = :failure
-          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
-          render :edit, status: :bad_request
-          return
-        end
+        next if @purchased_product.save
+
+        flash.now[:status] = :failure
+        flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+        render :edit, status: :bad_request
+        return
       end
 
       @order.update_attributes(order_params)
@@ -75,9 +77,8 @@ class OrdersController < ApplicationController
         @order.save
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
-        session[:order_id] = nil
-        redirect_to root_path
-      # redirect_to order_confirmation_path(@order)
+        redirect_to confirmation_path
+
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Purchase not successful'
@@ -87,13 +88,24 @@ class OrdersController < ApplicationController
     end
   end
 
+  def confirmation
+    @paid_order = Order.find_by(id: params[:order_id])
+    if @paid_order
+      session[:paid_order] = nil
+    else
+      flash[:warning] = 'Your order not go through. Please try again.'
+    end
+    session[:order_id] = nil
+  end
+
   # Empty the cart
   def destroy
     @order.order_items.destroy_all
     flash[:status] = :success
     flash[:result_text] = 'Your cart is now empty'
-    redirect_back(fallback_location: root_path)  
+    redirect_back(fallback_location: root_path)
   end
+
   private
 
   def order_params
