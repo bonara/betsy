@@ -9,9 +9,7 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
   end
 
-  # def new
-  #   @order = Order.new
-  # end
+  def new; end
 
   # add_to_cart
   def create
@@ -26,7 +24,7 @@ class OrdersController < ApplicationController
 
     if @product.stock < order_item_params[:quantity].to_i
       flash[:status] = :failure
-      flash[:result_text] = 'You have exceeded number of items in stock, please update the product quantity!'
+      flash[:result_text] = 'You have exceeded number of items in stock!'
       redirect_back(fallback_location: root_path)
     else
       if @order.order_items.map(&:product_id).include?(@product.id)

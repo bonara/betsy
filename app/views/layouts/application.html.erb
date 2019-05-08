@@ -38,6 +38,7 @@
               </div>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <%= link_to "Dashboard #{@current_user.name}", dashboard_path(@current_user), class: "dropdown-item" %>
+                <%= link_to "View your orders", orders_path, class: "dropdown-item" %>
                 <%= link_to "View your tours", merchant_path(session[:merchant_id]), class: "dropdown-item" %>
                 <%= link_to "Add New Tour", new_product_path, class: "dropdown-item" %>
                 <%= link_to "View all Categories", categories_path, class: "dropdown-item" %>
@@ -66,7 +67,7 @@
               <% if @order%>
                 <%= link_to "My Cart", order_path(@order) %>
               <% else %>
-                <%= link_to "My Cart", orders_path %>
+                <%= link_to "My Cart", new_order_path %>
               <% end %>
             </li>
           </ul>
