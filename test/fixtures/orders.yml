@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 moon:
-  status: complete
+  status: paid
   email: test@email.com
   address: 1600 road to nowhere
   name: Bob
@@ -10,10 +10,19 @@ moon:
   cc_num: 1234 2222 3333 2345
 
 mars:
-  status: complete
+  status: paid
   email: read@test.com
   address: 120 my house
   name: Sal
   cc_name: Sally
   cc_exp: 2019-05-01
   cc_num: 0987 2536 4826 3749
+
+jupiter:
+  status: pending
+  email: nil
+  address: nil
+  name: nil
+  cc_name: nil
+  cc_exp: nil
+  cc_num: nil

@@ -10,10 +10,7 @@ class Product < ApplicationRecord
   
   def avrg_rating
     unless self.reviews.count == 0
-      total_rating = self.reviews.map{|review| 
-        unless review.rating == nil
-          review.rating
-        end }.compact.sum
+      total_rating = self.reviews.map{|review| review.rating}.compact.sum
 
       avrg = total_rating/self.reviews.count
     end
