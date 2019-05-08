@@ -10,7 +10,6 @@ class Order < ApplicationRecord
   validates :cc_exp, presence: true, on: :update
   
 end
-<<<<<<< HEAD
 
 validates :cc_name, presence: true,  on: :update
 validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :update }
@@ -19,5 +18,3 @@ validates :cvv, presence: true, numericality: {greater_than_or_equal_to: 0, only
 validates :address, presence: true, on: :update
 
 end
-=======
->>>>>>> master
