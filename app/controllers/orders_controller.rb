@@ -108,13 +108,13 @@ class OrdersController < ApplicationController
   end
 
   def confirmation
-    @paid_order = Order.find_by(id: params[:order_id])
+    @paid_order = Order.find_by(id: params[:id])
 
-    if @paid_order
-      session[:paid_order] = nil
-    else
-      flash[:warning] = 'Your order not go through. Please try again.'
-    end
+    # if @paid_order
+    #   session[:paid_order] = nil
+    # else
+    #   flash[:warning] = 'Your order not go through. Please try again.'
+    # end
   end
 
   private

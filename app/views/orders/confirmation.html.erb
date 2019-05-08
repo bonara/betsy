@@ -3,16 +3,15 @@
 <section>
     <h1>Thanks for placing an order!</h1>
 </section>
-PAID ORDER IS
-<%= @paid_order %>
+
 <section class="status">
   <p>
-    Order Status: <%= @order.status.capitalize %> 
+    Order Status: <%= @paid_order.status.capitalize %> 
   </p>
 </section>
 
 <section class="purchase description">
-<% @order.order_items.each do |order_item| %>
+<% @paid_order.order_items.each do |order_item| %>
   <p>
     Trip: <%= "#{order_item.product.name}" %><br>
     Trip Link: <%= link_to "#{order_item.product.name.capitalize}", product_path(order_item.product.id) %><br>
@@ -24,9 +23,20 @@ PAID ORDER IS
 
 <section class="order checkout description">
   <p>
-    Total Cost: <%= @order.sub_total %><br>
-    Order ID: <%= @order.id %><br>
-    Order Received at: <%= @order.updated_at %>
+    Total Cost: <%= @paid_order.sub_total %><br>
+    Order ID: <%= @paid_order.id %><br>
+    Order Received at: <%= @paid_order.updated_at %>
+  </p>
+</section>
+
+
+<section class="shipping summary">
+  <p>
+    Name: <%= @paid_order.name %><br>
+    Email: <%= @paid_order.email%><br>
+    Mailing Address: <%= @paid_order.address %><br>
+    Credit Card Number: XXXX-XXXX-XXXX-<%= @paid_order.cc_num.split("").last(4).join %><br>
+    Expiration Date: <%= @paid_order.cc_exp %>
   </p>
 </section>
 
