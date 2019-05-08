@@ -11,14 +11,14 @@ class OrderItemsController < ApplicationController
 
   def update
     @order_item = OrderItem.find(params[:id])
-    @product = Product.find(order_item_params[:product_id])
+    @product = @order_item.product
 
     if @product.stock > order_item_params[:quantity].to_i
       @order_item.quantity = order_item_params[:quantity].to_i
       if @order_item.save
         flash[:status] = :success
         flash[:result_text] = "Successfully updated #{@order_item.id} quantity"
-        redirect_to show_cart_path
+        redirect_back(fallback_location: root_path)
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Could not update quantity'
