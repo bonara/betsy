@@ -11,9 +11,9 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
   end
 
-  # def new
-  #   @order = Order.new
-  # end
+  def new
+    @order = Order.new
+  end
 
   # add_to_cart
   def create

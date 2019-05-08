@@ -18,3 +18,5 @@ validates :cvv, presence: true, numericality: {greater_than_or_equal_to: 0, only
 validates :address, presence: true, on: :update
 
 end
+
+
