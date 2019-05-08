@@ -2,10 +2,15 @@
 
 one:
   rating: 5
-  product: Skydiving 
+  product: moon 
   comment: Best vacation ever! 
 
 two:
   rating: 3
-  product: Skydiving
+  product: mooon
   comment: It's fine! 
+
+three:
+  rating: 1
+  product: jupiter
+  comment: It's terrible!
