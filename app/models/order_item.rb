@@ -9,6 +9,5 @@ class OrderItem < ApplicationRecord
   def total
     total = quantity * product.price
   end
-
 end
 
