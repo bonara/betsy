@@ -16,6 +16,6 @@ Rails.application.routes.draw do
   delete '/logout', to: 'merchants#destroy', as: 'logout'
 
   post '/orders/new', to: 'orders#create'
-  post '/orders/:id/update', to: 'order_items#update', as: 'update_cart'
+  # post '/orders/:id/update', to: 'order_items#update', as: 'update_cart'
 
 end
