@@ -56,6 +56,8 @@ class MerchantsController < ApplicationController
     redirect_to root_path
   end
 
+  
+
   def dashboard
     @merchant = Merchant.find_by(id: params[:id])
     render_404 unless @merchant
