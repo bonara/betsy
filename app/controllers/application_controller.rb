@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :current_user
+  before_action :order
   def render_404
     # DPR: this will actually render a 404 page in production
     raise ActionController::RoutingError, 'Not Found'

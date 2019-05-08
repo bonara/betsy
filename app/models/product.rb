@@ -8,4 +8,16 @@ class Product < ApplicationRecord
   validates :name, uniqueness: true, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
   
+  def avrg_rating
+    unless self.reviews.count == 0
+      total_rating = self.reviews.map{|review| 
+        unless review.rating == nil
+          review.rating
+        end }.compact.sum
+
+      avrg = total_rating/self.reviews.count
+    end
+
+    return avrg
+  end
 end

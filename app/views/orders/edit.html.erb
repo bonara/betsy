@@ -1,7 +1,7 @@
 <%= form_for(@order) do |f| %>
   <div class="form-group">
     <%= f.label :name, "Name" %>
-    <%= f.text_field :name, required: true, autofocus: true, class: "form-control" %>
+    <%= f.text_field :name,  autofocus: true, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.label :email, "Email Address" %>
@@ -11,21 +11,18 @@
     <%= f.label :address, "Shipping Address" %>
     <%= f.text_area :address, class: "form-control" %>
   </div>
-  <div class="form-group">
-    <%= f.label :name, "Cardholder's Name" %>
-    <%= f.text_area :name, class: "form-control" %>
+  
+  <div class="form-group" >
+    <%= f.label :cc_name, "Cardholder's Name"  %>
+    <%= f.text_field :cc_name, class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label :cc_name, "Card Number" %>
-    <%= f.number_field :cc_name, class: "form-control" %>
+    <%= f.label :cc_num, "Card Number" %>
+    <%= f.text_field :cc_num, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.label :cc_exp, "Expiry Date"%>
     <%= f.date_field :cc_exp, class: "form-control" %>
-  </div>
-  <div class="form-group">
-    <%= f.label :cc_num, "Security Code" %>
-    <%= f.number_field :cc_num, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.submit "Submit Order", class: "btn btn-primary" %>

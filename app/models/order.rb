@@ -1,18 +1,20 @@
-# frozen_string_literal: true
-
 class Order < ApplicationRecord
   has_many :order_items
   has_many :products, through: :order_items
+  
+  validates :name, presence: true, on: :update
+  validates :email, presence: true, on: :update
+  validates :address, presence: true, on: :update
+  validates :cc_num, presence: true, on: :update
+  validates :cc_name, presence: true, on: :update
+  validates :cc_exp, presence: true, on: :update
 
-  validates :email, presence: true, if: :status_complete?
-  validates :address, presence: true, if: :status_complete?
-  validates :name, presence: true, if: :status_complete?
-  validates :cc_name, presence: true, if: :status_complete?
-  validates :cc_exp, presence: true, if: :status_complete?
-  validates :cc_num, presence: true, if: :status_complete?
-
-  def status_complete?
-    status == 'complete'
+  def sub_total
+    sum = 0
+    self.order_items.each do |order_item|
+      sum+= order_item.total_price
+    end
+    return sum
   end
 
   def total
@@ -23,4 +25,5 @@ class Order < ApplicationRecord
     return sum
   end
 
+  
 end

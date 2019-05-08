@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   root 'products#root'
-  resources :products 
+  resources :products do
+    resources :reviews, only: %i[new create]
+  end
   resources :merchants, only: %i[index show] 
   resources :categories
   resources :orders
@@ -14,4 +16,6 @@ Rails.application.routes.draw do
   delete '/logout', to: 'merchants#destroy', as: 'logout'
 
   post '/orders/new', to: 'orders#create'
+  # post '/orders/:id/update', to: 'order_items#update', as: 'update_cart'
+
 end
