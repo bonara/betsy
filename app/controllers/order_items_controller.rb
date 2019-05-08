@@ -17,7 +17,7 @@ class OrderItemsController < ApplicationController
       @order_item.quantity = order_item_params[:quantity].to_i
       if @order_item.save
         flash[:status] = :success
-        flash[:result_text] = "Successfully updated #{@order_item.id} quantity"
+        flash[:result_text] = "Successfully updated quantity"
         redirect_back(fallback_location: root_path)
       else
         flash.now[:status] = :failure
