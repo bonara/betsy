@@ -17,7 +17,6 @@ describe Merchant do
       merchant.valid?.must_equal false
       merchant.errors.messages.must_include :username
     end
-
     it 'requires an email address' do
       merchant = Merchant.new(username: 'testuser')
       merchant.valid?.must_equal false
@@ -101,7 +100,5 @@ describe Merchant do
       number = @merchant.total_orders
       expect(number).must_equal 0
     end
-    
-
   end
 end
