@@ -14,4 +14,21 @@ describe ReviewsController do
       must_respond_with :not_found
     end
   end
+
+  # describe 'create' do
+  #   it "redirects to product's page when saving a review" do
+  #     Review.count.must_equal 2
+  #     proc {
+  #       post product_reviews_path params: {
+  #         review: {
+  #           comment: 'This is another review that will be created',
+  #           rating: 2,
+  #           product1 = Product.new(name: name, comment: ok)
+  #         }
+  #       }
+  #     }.must_change 'Review.count', 1
+  #     must_respond_with :redirect
+  #     must_redirect_to product_path
+  #   end
+  # end
 end

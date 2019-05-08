@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Order < ApplicationRecord
   has_many :order_items
   has_many :products, through: :order_items
-  
+
   validates :name, presence: true, on: :update
   validates :email, presence: true, on: :update
   validates :address, presence: true, on: :update
@@ -11,10 +13,9 @@ class Order < ApplicationRecord
 
   def sub_total
     sum = 0
-    self.order_items.each do |order_item|
-      sum+= order_item.total_price
+    order_items.each do |order_item|
+      sum += order_item.total
     end
-    return sum
+    sum
   end
-  
 end

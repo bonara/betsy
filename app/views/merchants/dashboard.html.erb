@@ -30,11 +30,12 @@
 </section>
 
 <section>
-  <h3>Sold Tours</h3>
+  <h3>Order Fulfillment</h3>
   <table class="table">
     <thead>
       <tr>
         <th>Order#</th>
+        <th>Date</th>
         <th>Item</th>
         <th>Price</th>
         <th>Quantity</th>
@@ -44,16 +45,19 @@
     </thead>
     <tbody>
       <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: ["paid", "complete"] ).each do |order|%>
+        <% product.orders.each do |order|%>
           <% order.order_items.where(product_id: product.id).each do |order_item|%>
+            <% if order.status == "paid" || order.status == "complete"%>
             <tr>
-              <td><%= order.id %></td>
+              <td><%= link_to order.id, confirmation_path(order.id) %></td>
+              <td><%= order.created_at %></td>
               <td><%= link_to order_item.product.name, product_path(order_item.product) %></td>
               <td><%= sprintf("%.2f",order_item.product.price) %></td>
               <td><%= order_item.quantity %></td>
               <td>subtotal</td>
               <td><%= order.status %></td>
             </tr>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
@@ -62,31 +66,27 @@
 </section>
 
 <section>
-  <h3>Revenue</h3>
+  <h3>Order Summary</h3>
   <table class="table">
     <thead>
       <tr>
-        <th>Pending</th>
         <th>Paid</th>
         <th>Complete</th>
-        <th>Cancelled</th>
         <th>Total</th>
       </tr>
     </thead>
     <tbody>
-      <% @merchant.products.each do |product| %>
-        <% product.orders.where(status: "paid").each do |order|%>
-          <% order.order_items.each do |order_item|%>
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>$<%= sprintf("%.2f",@merchant.total("paid"))%></td>
+              <td>$<%= sprintf("%.2f",@merchant.total("complete"))%></td>
+              <td>$<%= sprintf("%.2f",@merchant.total_revenue)%></td>
             </tr>
-          <% end %>
-        <% end %>
-      <% end %>
+            <tr>
+              <td><%= @merchant.number_orders("paid")%> orders </td>
+              <td><%= @merchant.number_orders("complete")%> orders </td>
+              <td><%= @merchant.total_orders %> orders </td>
+            </tr>
+        
     </tbody>
   </table>
 </section>

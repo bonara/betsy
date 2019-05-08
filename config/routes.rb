@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   resources :products do
     resources :reviews, only: %i[new create]
   end
-  resources :merchants, only: %i[index show] 
+  resources :merchants, only: %i[index show]
   resources :categories
+  get '/orders/:id/confirmation', to: 'orders#confirmation', as: 'confirmation'
   resources :orders
   resources :order_items
 
@@ -17,5 +18,4 @@ Rails.application.routes.draw do
 
   post '/orders/new', to: 'orders#create'
   # post '/orders/:id/update', to: 'order_items#update', as: 'update_cart'
-
 end

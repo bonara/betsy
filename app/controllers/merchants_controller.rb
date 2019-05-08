@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MerchantsController < ApplicationController
   before_action :require_login, only: %i[destroy dashboard]
 
@@ -53,6 +55,8 @@ class MerchantsController < ApplicationController
     flash[:result_text] = "Successfully logged out!"
     redirect_to root_path
   end
+
+  
 
   def dashboard
     @merchant = Merchant.find_by(id: params[:id])

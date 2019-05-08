@@ -16,6 +16,15 @@ jupiter:
   photo_url: placeholder_url_2
   merchant: ada
 
+rings:
+  name: Saturn Rings 
+  price: 10
+  description: slide around saturn rings
+  stock: 50
+  photo_url: placeholder_url_2
+  merchant: ada
+
+
 mars:
   name: Luxury Escape
   price: 9859522.99
