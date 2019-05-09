@@ -16,14 +16,14 @@
       Trip: <%= "#{order_item.product.name}" %><br>
       Trip Link: <%= link_to "#{order_item.product.name.capitalize}", product_path(order_item.product.id) %><br>
       Trip Quantity: <%= order_item.quantity %><br> 
-      Subtotal: <%= order_item.total %>
+      Subtotal: <%= "$#{sprintf("%.2f",order_item.total)}" %>
     </p>
     <% end %>
   </div>
 
   <div class="order checkout description">
     <p>
-      Total Cost: <%= @paid_order.sub_total %><br>
+      Total Cost: <%= "$#{sprintf("%.2f",@paid_order.sub_total)}" %><br> 
       Order ID: <%= @paid_order.id %><br>
       Order Received at: <%= localize(@paid_order.updated_at, :format => :long) %>
     </p>
