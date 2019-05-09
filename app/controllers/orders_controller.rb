@@ -2,11 +2,13 @@
 
 class OrdersController < ApplicationController
   skip_before_action :require_login
+  before_action :find_order, only: [:show, :edit]
   # this is the cart
-  def show
-    @order = Order.find_by(id: params[:id])
-  end
+  def show; end
 
+  # checkout
+  def edit; end
+  
   def new; end
 
   # add_to_cart
@@ -46,11 +48,6 @@ class OrdersController < ApplicationController
     end
   end
 
-  # checkout
-  def edit
-    @order = Order.find_by(id: params[:id])
-    render_404 unless @order
-  end
 
   # process payment
   def update
@@ -95,16 +92,33 @@ class OrdersController < ApplicationController
     @order.order_items.destroy_all
     flash[:status] = :success
     flash[:result_text] = 'Your cart is now empty'
+    redirect_back(fallback_location: root_path)  
+    unless @order
+      head :not_found
+      return
+    end
+  end
     redirect_back(fallback_location: root_path)
   end
 
   private
 
-  def order_params
-    params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
-  end
+end
 
-  def order_item_params
-    params.require(:order_item).permit(:quantity, :product_id)
+private
+
+def order_params
+  params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+end
+
+def order_item_params
+  params.require(:order_item).permit(:quantity, :product_id)
+end
+
+def find_order
+  @order = Order.find_by(id: params[:id])
+  unless @order
+    head :not_found
+    return
   end
 end
