@@ -2,7 +2,7 @@
 
 class OrdersController < ApplicationController
   skip_before_action :require_login
-  before_action :find_order, only: [:show, :edit]
+  before_action :find_order, only: [:show, :edit, :destroy]
 
   def index
     @orders = Order.all
@@ -99,16 +99,15 @@ class OrdersController < ApplicationController
 
   # Empty the cart
   def destroy
-    @order.order_items.destroy_all
-    flash[:status] = :success
-    flash[:result_text] = 'Your cart is now empty'
-    redirect_back(fallback_location: root_path)  
     unless @order
       head :not_found
       return
     end
-  end
-    redirect_back(fallback_location: root_path)
+    @order.order_items.destroy_all
+    flash[:status] = :success
+    flash[:result_text] = 'Your cart is now empty'
+    
+    redirect_back(fallback_location: root_path)  
   end
 
   def confirmation
@@ -120,8 +119,6 @@ class OrdersController < ApplicationController
     #   flash[:warning] = 'Your order not go through. Please try again.'
     # end
   end
-
-  private
 
 end
 

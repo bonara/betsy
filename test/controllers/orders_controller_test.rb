@@ -42,7 +42,6 @@ describe OrdersController do
 
       get "/orders/#{order.id}"
 
-      # Assert
       must_respond_with :success
     end
   end
@@ -66,37 +65,34 @@ describe OrdersController do
   end
 
   describe "destroy" do
-    it 'removes the order from the database' do
-      order = Order.new
+    it 'removes all order items from order' do
+      
+      order = Order.create
 
-      product = Product.new
+      product = Product.first
 
-      order_item = OrderItem.create(
+      order_item = OrderItem.create!(
         order_id: order.id, 
-        product_id: product.id
+        product_id: product.id,
+        quantity: 2
       )
 
-      expect do
-        delete order_path(order.id)
-      end.must_change 'Order.order_items.count', -1
+      expect(order.order_items.length).must_equal 1
 
-      must_respond_with :success
-      must_redirect_to fallback_location: root_path
+      delete order_path(order)
+
+      after_delete = Order.find(order.id)
+
+      expect(after_delete.order_items.length).must_equal 0
+
+      must_respond_with :redirect
+
     end
 
     it 'returns a 404 if the order does not exist' do
-      order = 182939
+      order_id = 182939
 
-      product = Product.new
-
-      order_item = OrderItem.create(
-        order_id: order, 
-        product_id: product
-      )
-
-      expect do
-        delete order_path(order)
-      end.wont_change 'Order.count'
+      delete order_path(order_id)
 
       must_respond_with :not_found
 
@@ -104,60 +100,68 @@ describe OrdersController do
   end
 
   describe "create" do
-    it "be able to create a new order" do
-      order = Order.new
+    it "be able to create a new order with no existing order" do
+      product = Product.first
 
-      product = Product.new
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
+        }
+      }
+    
+      post orders_path, params: order_hash
 
-      order_item = OrderItem.create(
-        order_id: order.id, 
-        product_id: product.id
-      )
+      order_item = OrderItem.find_by(product_id: product.id)
 
-        expect do
-          post tasks_path, params: task_hash
-        end.must_change 'Task.count', 1
-  
-        new_task = Task.find_by(name: task_hash[:task][:name])
-        expect(new_task.description).must_equal task_hash[:task][:description]
-        expect(new_task.completion_date.strftime('%Y-%m-%d')).must_equal task_hash[:task][:completion_date]
-        expect(new_task.is_complete).must_equal false
-  
-        must_respond_with :redirect
-        must_redirect_to task_path(new_task.id)
-      end
-      expect {
-        post products_path, params: product_data
-      }.must_change "Product.count", +1
+      expect(order_item.product).must_equal product
+      expect(order_item.quantity).must_equal 2
+    end
 
-  
-      must_respond_with :redirect
-      must_redirect_to products_path
+    it "be able to create a new order WITH existing order" do
+
+      product = Product.first
+
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
+        }
+      }
+    
+      post orders_path, params: order_hash
+      post orders_path, params: order_hash
+
+      order_item = OrderItem.find_by(product_id: product.id)
+
+      expect(order_item.product).must_equal product
+      expect(order_item.quantity).must_equal 4
+
     end
   end
 
-  it 'can update an existing task' do
-    task = Task.create!(name: 'Do dishes')
-    task_data = {
-      task: {
-        name: "Don't do dishes"
-      }
-    }
+  # it 'can update an existing task' do
+  #   task = Task.create!(name: 'Do dishes')
+  #   task_data = {
+  #     task: {
+  #       name: "Don't do dishes"
+  #     }
+    
 
-    patch task_path(task), params: task_data
+  #   patch task_path(task), params: task_data
 
-    must_respond_with :redirect
-    must_redirect_to task_path(task)
+  #   must_respond_with :redirect
+  #   must_redirect_to task_path(task)
 
-    task.reload
-    expect(task.name).must_equal(task_data[:task][:name])
-  end
+  #   task.reload
+  #   expect(task.name).must_equal(task_data[:task][:name])
+  # end
 
-  it 'will redirect to the root page if given an invalid id' do
-    get task_path(-1)
+  # it 'will redirect to the root page if given an invalid id' do
+  #   get task_path(-1)
 
-    must_respond_with :redirect
-    must_redirect_to tasks_path
-  end
+  #   must_respond_with :redirect
+  #   must_redirect_to tasks_path
+  # end
 
 end
