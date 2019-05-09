@@ -20,7 +20,7 @@
           <td><%= product.avrg_rating %></td>
           <td><%= product.status%></td>
           <td> <% product.categories.each do |category| %> 
-                <%= link_to category.name, category_path(category.id) %>,
+                <%= link_to category.name, category_path(category.id) %>
             <% end %> 
             </td>
         </tr>
@@ -50,7 +50,7 @@
             <% if order.status == "paid" || order.status == "complete"%>
             <tr>
               <td><%= link_to order.id, confirmation_path(order.id) %></td>
-              <td><%= order.updated_at %></td>
+              <td><%= localize(order.updated_at, :format => :long)  %></td> 
               <td><%= link_to order_item.product.name, product_path(order_item.product) %></td>
               <td><%= "$#{sprintf("%.2f", order_item.product.price)}" %></td>
               <td><%= order_item.quantity %></td>
