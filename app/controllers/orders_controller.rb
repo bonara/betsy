@@ -2,10 +2,6 @@
 
 class OrdersController < ApplicationController
   skip_before_action :require_login
-  def index
-    @orders = Order.all
-  end
-
   # this is the cart
   def show
     @order = Order.find_by(id: params[:id])
@@ -20,7 +16,7 @@ class OrdersController < ApplicationController
       @order = Order.create(status: 'pending')
       session[:order_id] = @order.id
     else
-      @order = Order.find_by(id: session[:order_id])
+      @order = Order.find_by!(id: session[:order_id])
     end
 
     @product = Product.find(order_item_params[:product_id])
@@ -78,6 +74,7 @@ class OrdersController < ApplicationController
         @order.save
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
+        session[:order_id] = nil
         redirect_to confirmation_path(@order.id)
 
       else
@@ -91,12 +88,6 @@ class OrdersController < ApplicationController
 
   def confirmation
     @paid_order = Order.find_by(id: params[:id])
-    # if @paid_order == nil
-    # #   session[:paid_order] = nil
-    # # else
-    #   flash[:warning] = 'Your order not go through. Please try again.'
-    # end
-    session[:order_id] = nil
   end
 
   # Empty the cart
@@ -105,16 +96,6 @@ class OrdersController < ApplicationController
     flash[:status] = :success
     flash[:result_text] = 'Your cart is now empty'
     redirect_back(fallback_location: root_path)
-  end
-
-  def confirmation
-    @paid_order = Order.find_by(id: params[:id])
-
-    # if @paid_order
-    #   session[:paid_order] = nil
-    # else
-    #   flash[:warning] = 'Your order not go through. Please try again.'
-    # end
   end
 
   private

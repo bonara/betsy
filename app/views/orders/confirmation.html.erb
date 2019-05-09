@@ -1,46 +1,46 @@
 <section class="main-body">
 
-<section>
-    <h1>Thanks for placing an order!</h1>
+  <div>
+      <h1>Thanks for placing an order!</h1>
+  </div>
+
+  <div class="status">
+    <p>
+      Order Status: <%= @paid_order.status.capitalize %> 
+    </p>
+  </div>
+
+  <div class="purchase description">
+  <% @paid_order.order_items.each do |order_item| %>
+    <p>
+      Trip: <%= "#{order_item.product.name}" %><br>
+      Trip Link: <%= link_to "#{order_item.product.name.capitalize}", product_path(order_item.product.id) %><br>
+      Trip Quantity: <%= order_item.quantity %><br> 
+      Subtotal: <%= order_item.total %>
+    </p>
+    <% end %>
+  </div>
+
+  <div class="order checkout description">
+    <p>
+      Total Cost: <%= @paid_order.sub_total %><br>
+      Order ID: <%= @paid_order.id %><br>
+      Order Received at: <%= localize(@paid_order.updated_at, :format => :long) %>
+    </p>
+  </div>
+
+
+  <div class="shipping summary">
+    <p>
+      Name: <%= @paid_order.name %><br>
+      Email: <%= @paid_order.email%><br>
+      Mailing Address: <%= @paid_order.address %><br>
+      Credit Card Number: XXXX-XXXX-XXXX-<%= @paid_order.cc_num.split("").last(5).join %><br>
+      Expiration Date: <%= @paid_order.cc_exp %>
+    </p>
+  </div>
+
+  <div>
+      <h3>Bon Voyage!</h3>
+  </div>
 </section>
-
-<section class="status">
-  <p>
-    Order Status: <%= @paid_order.status.capitalize %> 
-  </p>
-</section>
-
-<section class="purchase description">
-<% @paid_order.order_items.each do |order_item| %>
-  <p>
-    Trip: <%= "#{order_item.product.name}" %><br>
-    Trip Link: <%= link_to "#{order_item.product.name.capitalize}", product_path(order_item.product.id) %><br>
-    Trip Quantity: <%= order_item.quantity %><br> 
-    Subtotal: <%= order_item.total %>
-  </p>
-  <% end %>
-</section>
-
-<section class="order checkout description">
-  <p>
-    Total Cost: <%= @paid_order.sub_total %><br>
-    Order ID: <%= @paid_order.id %><br>
-    Order Received at: <%= @paid_order.updated_at %>
-  </p>
-</section>
-
-
-<section class="shipping summary">
-  <p>
-    Name: <%= @paid_order.name %><br>
-    Email: <%= @paid_order.email%><br>
-    Mailing Address: <%= @paid_order.address %><br>
-    Credit Card Number: XXXX-XXXX-XXXX-<%= @paid_order.cc_num.split("").last(5).join %><br>
-    Expiration Date: <%= @paid_order.cc_exp %>
-  </p>
-</section>
-
-<section>
-    <h3>Bon Voyage!</h3>
-</section>
-

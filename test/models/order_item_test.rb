@@ -18,5 +18,17 @@ describe OrderItem do
       order_item.valid?.must_equal false
       order_item.errors.messages.must_include :quantity
     end
+    it 'requires a quantity greter than 0' do
+      order_item = OrderItem.new(product_id: products(:moon), quantity: 0)
+      order_item.valid?.must_equal false
+      order_item.errors.messages.must_include :quantity
+    end
+  end
+
+  describe 'custom method' do
+    it 'returns a total of an order item' do
+      order_item = order_items(:order_item_one)
+      order_item.total.must_equal 31998
+    end
   end
 end
