@@ -140,28 +140,77 @@ describe OrdersController do
     end
   end
 
-  # it 'can update an existing task' do
-  #   task = Task.create!(name: 'Do dishes')
-  #   task_data = {
-  #     task: {
-  #       name: "Don't do dishes"
-  #     }
+  describe 'update' do 
+    it 'Can purchase a product' do
+      product = Product.first
+
+      stock = product.stock
+      price = product.price
+
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
+        }
+      }
+
+      post orders_path, params: order_hash
+
+      order_item = OrderItem.find_by(product_id: product.id)
+
+      update_hash = {
+        order: {
+          email: 'test@email.com',
+          address: 'random address',
+          name: 'Jack',
+          cc_name: 'Jackie',
+          cc_exp: 20190501,
+          cc_num: 12345432112344321
+        }
+      }
+
+      patch order_path(order_item.order_id), params: update_hash
+
+      expect(order_item.product.stock).must_equal 48
+      expect(order_item.order.status).must_equal 'paid'
+
+    end
     
+    it 'Payment will not go through if the stock is less than quantity' do
 
-  #   patch task_path(task), params: task_data
+      product = Product.first
 
-  #   must_respond_with :redirect
-  #   must_redirect_to task_path(task)
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 1,
+        }
+      }
+      post orders_path, params: order_hash
+      
+      order_item = OrderItem.find_by(product_id: product.id)
 
-  #   task.reload
-  #   expect(task.name).must_equal(task_data[:task][:name])
-  # end
+      order_item.quantity = 51
 
-  # it 'will redirect to the root page if given an invalid id' do
-  #   get task_path(-1)
+      order_item.save
 
-  #   must_respond_with :redirect
-  #   must_redirect_to tasks_path
-  # end
+      update_hash = {
+        order: {
+          status: 'paid',
+          email: 'test@email.com',
+          address: 'random address',
+          name: 'Jack',
+          cc_name: 'Jackie',
+          cc_exp: 20190501,
+          cc_num: 12345432112344321
+        }
+      }
+
+      patch order_path(order_item.order_id), params: update_hash
+
+      must_respond_with :bad_request
+
+    end
+  end
 
 end

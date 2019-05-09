@@ -59,15 +59,15 @@ class OrdersController < ApplicationController
     @order.transaction do
       @order.order_items.each do |item|
         @purchased_product = Product.find_by(id: item.product_id)
-        next unless @purchased_product.stock > item.quantity.to_i
-
-        @purchased_product.stock -= item.quantity.to_i
-        next if @purchased_product.save
-
+        if @purchased_product.stock > item.quantity.to_i
+          @purchased_product.stock -= item.quantity.to_i
+          @purchased_product.save
+        else
         flash.now[:status] = :failure
         flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
         render :edit, status: :bad_request
         return
+        end
       end
 
       @order.update_attributes(order_params)
