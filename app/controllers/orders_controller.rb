@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class OrdersController < ApplicationController
   skip_before_action :require_login
   before_action :find_order, only: [:show, :edit]
@@ -103,22 +101,21 @@ class OrdersController < ApplicationController
 
   private
 
-end
+  def order_params
+    params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+  end
 
-private
+  def order_item_params
+    params.require(:order_item).permit(:quantity, :product_id)
+  end
 
-def order_params
-  params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
-end
-
-def order_item_params
-  params.require(:order_item).permit(:quantity, :product_id)
-end
-
-def find_order
-  @order = Order.find_by(id: params[:id])
-  unless @order
-    head :not_found
-    return
+  def find_order
+    @order = Order.find_by(id: params[:id])
+    unless @order
+      head :not_found
+      return
+    end
   end
 end
+
+
