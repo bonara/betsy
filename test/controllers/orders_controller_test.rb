@@ -125,7 +125,7 @@ describe OrdersController do
   
         must_respond_with :redirect
         must_redirect_to task_path(new_task.id)
-      end
+      
       expect {
         post products_path, params: product_data
       }.must_change "Product.count", +1
@@ -135,29 +135,29 @@ describe OrdersController do
       must_redirect_to products_path
     end
   end
-
-  it 'can update an existing task' do
-    task = Task.create!(name: 'Do dishes')
-    task_data = {
-      task: {
-        name: "Don't do dishes"
+  describe "update an order" do
+    it 'can update an existing task' do
+      task = Task.create!(name: 'Do dishes')
+      task_data = {
+        task: {
+          name: "Don't do dishes"
+        }
       }
-    }
 
-    patch task_path(task), params: task_data
+      patch task_path(task), params: task_data
 
-    must_respond_with :redirect
-    must_redirect_to task_path(task)
+      must_respond_with :redirect
+      must_redirect_to task_path(task)
 
-    task.reload
-    expect(task.name).must_equal(task_data[:task][:name])
+      task.reload
+      expect(task.name).must_equal(task_data[:task][:name])
+    end
+
+    it 'will redirect to the root page if given an invalid id' do
+      get task_path(-1)
+
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
-
-  it 'will redirect to the root page if given an invalid id' do
-    get task_path(-1)
-
-    must_respond_with :redirect
-    must_redirect_to tasks_path
-  end
-
 end
