@@ -21,7 +21,9 @@ class Merchant < ApplicationRecord
     self.products.each do |product|
       order_items = OrderItem.where(product_id: product.id)
         order_items.each do |item|
+          if item.order.status == "complete" || item.order.status == "paid"
           sum = sum + item.total
+          end
         end
     end
     return sum
@@ -47,7 +49,9 @@ class Merchant < ApplicationRecord
     self.products.each do |product|
       order_items = OrderItem.where(product_id: product.id)
         order_items.each do |item|
+          if item.order.status == "complete" || item.order.status == "paid"
           orders.push(item.order)
+          end
         end
     end
     total = orders.uniq.length
