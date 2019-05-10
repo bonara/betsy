@@ -15,6 +15,31 @@ describe ReviewsController do
     end
   end
 
+  describe 'create' do
+    it 'does not allow a user to leave a review on their own product' do
+      review_data = {
+        review: {
+          product_id: 3,
+          rating: '5',
+          user_id: 1
+        }
+      }
+
+      merchant_id = Product.find_by(id: 3)
+
+      expect do
+        post create_product_review_path, params: review_data
+      end
+
+      if merchant_id == 1
+        expect(flash[:status]).must_equal :failure
+
+      else
+        expect(flash[:status]).must_equal :success
+      end
+    end
+  end
+
   # describe 'create' do
   #   it "redirects to product's page when saving a review" do
   #     Review.count.must_equal 2
