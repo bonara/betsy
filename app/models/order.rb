@@ -13,7 +13,7 @@ class Order < ApplicationRecord
 
   def sub_total
     sum = 0
-    order_items.each do |order_item|
+    self.order_items.each do |order_item|
       sum += order_item.total
     end
     sum

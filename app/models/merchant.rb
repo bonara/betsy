@@ -40,9 +40,7 @@ class Merchant < ApplicationRecord
         end
     end
     return sum
-
   end
-
 
   def total_orders
     orders = []
@@ -71,5 +69,4 @@ class Merchant < ApplicationRecord
     total = orders.uniq.length
     return total
   end
-
 end

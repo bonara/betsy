@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MerchantsController < ApplicationController
   before_action :require_login, only: %i[destroy dashboard]
 
@@ -34,16 +32,12 @@ class MerchantsController < ApplicationController
         # way we've configured GitHub. Our strategy will
         # be to display error messages to make future
         # debugging easier.
-       
         flash.now[:status] = :failure
         flash.now[:result_text] = '"Could not create new user account:'
         flash.now[:messages] = @merchant.errors.messages
         return redirect_to root_path
       end
     end
-
-    
-
     # If we get here, we have a valid user instance
     session[:merchant_id] = @merchant.id
     redirect_to root_path
@@ -55,8 +49,6 @@ class MerchantsController < ApplicationController
     flash[:result_text] = "Successfully logged out!"
     redirect_to root_path
   end
-
-  
 
   def dashboard
     @merchant = Merchant.find_by(id: params[:id])

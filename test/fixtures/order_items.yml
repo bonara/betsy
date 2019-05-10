@@ -1,7 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-moon:
-  quantity: 50
+order_item_one:
+  quantity: 2
+  product: moon
+  order: order_one
 
-mars:
-  quantity: 39
+order_item_two:
+  quantity: 1
+  product: moon
+  order: order_one
+  
+order_item_three:
+  quantity: 3
+  product: mars
+  order: order_two
+
+order_item_four:
+  quantity: 2
+  product: rings
+  order: order_three
