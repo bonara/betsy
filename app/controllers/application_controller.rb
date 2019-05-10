@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :current_user
   before_action :order
+  before_action :find_category_and_merchant
 
   def render_404
     raise ActionController::RoutingError.new("Not Found")
@@ -21,5 +22,10 @@ class ApplicationController < ActionController::Base
       flash[:error] = 'You must be logged in to view this section'
       redirect_to root_path
     end
+  end
+
+  def find_category_and_merchant
+    @categories = Category.all
+    @merchants = Merchant.all
   end
 end

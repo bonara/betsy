@@ -1,5 +1,6 @@
-<h2>Shopping Cart</h2>
-<% if @order%>  
+<section>
+  <h2>Shopping Cart</h2>
+  <% if @order%>  
     <% @order.order_items.each do |item| %>
     <ul>
       <li>Item: <%= item.product.name %></li>
@@ -24,6 +25,6 @@
       <div>Your cart is empty</div>
     <% end %>
   <% end %>
-
+<section>
 
 

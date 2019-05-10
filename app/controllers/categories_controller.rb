@@ -1,8 +1,6 @@
 class CategoriesController < ApplicationController
   skip_before_action :require_login, only: %i[index show]
-  def index
-    @categories = Category.all
-  end
+  def index; end
 
   def show
     @category = Category.find(params[:id])

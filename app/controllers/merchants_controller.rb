@@ -1,9 +1,7 @@
 class MerchantsController < ApplicationController
   before_action :require_login, only: %i[destroy dashboard]
 
-  def index
-    @merchants = Merchant.all
-  end
+  def index; end
 
   def show
     @merchant = Merchant.find_by(id: params[:id])

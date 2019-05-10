@@ -1,7 +1,9 @@
-<h1> Merchants </h1>
+<section>
+  <h1> Merchants </h1>
 
-<ul>
- <% @merchants.each do |merchant| %>
-  <li> <%= link_to "#{merchant.name}", merchant_path(merchant) %> </li>
- <% end %>
-</ul>
+  <ul>
+  <% @merchants.each do |merchant| %>
+    <li> <%= link_to "#{merchant.name}", merchant_path(merchant) %> </li>
+  <% end %>
+  </ul>
+</section>

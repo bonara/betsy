@@ -12,7 +12,7 @@
 
   <body>
     <header>
-      <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar fixed-top navbar-expand-lg navbar-light">
         <div class="navbar-brand"> 
         <%= link_to "Planetsy", root_path %>
         </div>
@@ -25,10 +25,34 @@
                 <%= link_to "All Tours", products_path %>
             </li>
             <li class="nav-item">
-                <%= link_to "All Categories", categories_path %>
+                <div class="dropdown">
+                  <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">
+                    <%= "Shop by Categories" %>
+                  </div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <% if @categories %>
+                      <% @categories.take(6).each do |category|%>
+                      <%= link_to "#{category.name}", category_path(category), class: "dropdown-item"%>
+                      <% end %>
+                    <% end %>
+                    <%= link_to "All Categories", categories_path, class: "dropdown-item" %>
+                  </div>
+                </div>
             </li>
             <li class="nav-item">
-                <%= link_to "All Merchants", merchants_path %>
+              <div class="dropdown">
+                  <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu2" aria-haspopup="true" aria-expanded="false">
+                    <%= "Shop by Merchants" %>
+                  </div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <% if @merchants%>
+                      <% @merchants.take(6).each do |merchant|%>
+                      <%= link_to "#{merchant.username}", merchant_path(merchant), class: "dropdown-item"%>
+                      <% end %>
+                    <% end %>
+                    <%= link_to "All Merchants", merchants_path, class: "dropdown-item" %>
+                  </div>
+                </div>
             </li class="nav-item">
             <li class="nav-item">
             <% if @current_user %>
@@ -75,7 +99,7 @@
     </header>
 
     <% if flash[:result_text] or flash[:messages] %>
-    <section class="alert_container">
+    <div class="alert_container">
       <div class="alert alert-<%= flash[:status].to_s == 'failure' ? 'warning' : flash[:status] %>">
         <span><%= flash[:status].to_s == "failure" ? "A problem occurred: " : "" %><%= flash[:result_text] %></span>
         <% if flash[:messages] %>
@@ -88,15 +112,15 @@
           </ul>
         <% end %>
       </div>
-    </section>
+    </div>
   <% end %>
 
     <main>
       <%= yield %>
     </main>
-    <footer>
-      <p>&copy; Copyring 2019, Planetsy</p> 
-      <p>Powered by n2rk</p>
+    
+    <footer class="page-footer">
+      <div class="footer-copyright text-center">© 2019 Copyright: Planetsy <p>Powered by n2rk</p> </div>
     </footer>
   </body>
 </html>
