@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
-  skip_before_action :require_login, except: %i[new create destroy]
-  before_action :find_product, only: %i[show edit update]
+  skip_before_action :require_login, except: [:new, :create, :destroy]
+  before_action :find_product, only: [:show, :edit, :update, :destroy]
+
   def root; end
 
   def index
@@ -45,9 +46,12 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    @product.destroy
+    puts 'controller'
+
+    puts @product.id
+    @product.destroy!
     flash[:status] = :success
-    flash[:result_text] = "Successfully destroyed #{product.name}"
+    flash[:result_text] = "Successfully destroyed #{@product.name}"
     redirect_to products_path
   end
 
@@ -58,7 +62,12 @@ class ProductsController < ApplicationController
   end
 
   def find_product
+    puts 'test'
+    puts params[:id]
     @product = Product.find_by(id: params[:id])
-    render_404 unless @product
+    unless @product
+      head :not_found
+      return
+    end
   end
 end

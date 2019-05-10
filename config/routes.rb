@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :products do
     resources :reviews, only: %i[new create]
   end
+  
   resources :merchants, only: %i[index show]
   get 'merchants/:id/dashboard', to: 'merchants#dashboard', as: 'dashboard'
   

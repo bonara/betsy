@@ -3,7 +3,7 @@ require 'test_helper'
 describe OrdersController do
   describe 'index' do
     it 'succeeds when there are orders' do
-      get orders_path
+      get root_path
 
       must_respond_with :success
     end
@@ -13,7 +13,7 @@ describe OrdersController do
         order.destroy
       end
 
-      get orders_path
+      get root_path
 
       must_respond_with :success
     end
@@ -42,7 +42,6 @@ describe OrdersController do
 
       get "/orders/#{order.id}"
 
-      # Assert
       must_respond_with :success
     end
   end
@@ -66,37 +65,34 @@ describe OrdersController do
   end
 
   describe "destroy" do
-    it 'removes the order from the database' do
-      order = Order.new
+    it 'removes all order items from order' do
+      
+      order = Order.create
 
-      product = Product.new
+      product = Product.first
 
-      order_item = OrderItem.create(
+      order_item = OrderItem.create!(
         order_id: order.id, 
-        product_id: product.id
+        product_id: product.id,
+        quantity: 2
       )
 
-      expect do
-        delete order_path(order.id)
-      end.must_change 'Order.order_items.count', -1
+      expect(order.order_items.length).must_equal 1
 
-      must_respond_with :success
-      must_redirect_to fallback_location: root_path
+      delete order_path(order)
+
+      after_delete = Order.find(order.id)
+
+      expect(after_delete.order_items.length).must_equal 0
+
+      must_respond_with :redirect
+
     end
 
     it 'returns a 404 if the order does not exist' do
-      order = 182939
+      order_id = 182939
 
-      product = Product.new
-
-      order_item = OrderItem.create(
-        order_id: order, 
-        product_id: product
-      )
-
-      expect do
-        delete order_path(order)
-      end.wont_change 'Order.count'
+      delete order_path(order_id)
 
       must_respond_with :not_found
 
@@ -104,60 +100,126 @@ describe OrdersController do
   end
 
   describe "create" do
-    it "be able to create a new order" do
-      order = Order.new
+    it "be able to create a new order with no existing cart/order" do
+      product = Product.first
 
-      product = Product.new
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
+        }
+      }
+    
+      post orders_path, params: order_hash
 
-      order_item = OrderItem.create(
-        order_id: order.id, 
-        product_id: product.id
-      )
+      order_item = OrderItem.find_by(product_id: product.id)
 
-        expect do
-          post tasks_path, params: task_hash
-        end.must_change 'Task.count', 1
-  
-        new_task = Task.find_by(name: task_hash[:task][:name])
-        expect(new_task.description).must_equal task_hash[:task][:description]
-        expect(new_task.completion_date.strftime('%Y-%m-%d')).must_equal task_hash[:task][:completion_date]
-        expect(new_task.is_complete).must_equal false
-  
-        must_respond_with :redirect
-        must_redirect_to task_path(new_task.id)
-      
-      expect {
-        post products_path, params: product_data
-      }.must_change "Product.count", +1
+      expect(order_item.product).must_equal product
+      expect(order_item.quantity).must_equal 2
+    end
 
-  
-      must_respond_with :redirect
-      must_redirect_to products_path
+    it "be able to create a new order WITH existing cart/order" do
+
+      product = Product.first
+
+      order = Order.first
+
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
+        }
+      }
+    
+      post orders_path, params: order_hash
+
+      order_item = OrderItem.find_by(order_id: order.id)
+
+      expect(order_item.product).must_equal product
+      expect(order_item.quantity).must_equal 2
+
     end
   end
-  describe "update an order" do
-    it 'can update an existing task' do
-      task = Task.create!(name: 'Do dishes')
-      task_data = {
-        task: {
-          name: "Don't do dishes"
+
+  describe 'update' do 
+    it 'Can purchase a product' do
+      product = Product.first
+
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 2,
         }
       }
 
-      patch task_path(task), params: task_data
+      post orders_path, params: order_hash
+
+      order_id = session[:order_id]
+
+      update_hash = {
+        order: {
+          email: 'test@email.com',
+          address: 'random address',
+          name: 'Jack',
+          cc_name: 'Jackie',
+          cc_exp: 20190501,
+          cc_num: 12345432112344321
+        }
+      }
+
+      patch order_path(order_id), params: update_hash
+
+      order_item = OrderItem.find_by(order_id: order_id)
+
+      order = Order.find(order_id)
+
+      expect(order_item.product.stock).must_equal 48
+      expect(order.status).must_equal 'paid'
+      expect(session[:order_id]).must_be_nil
 
       must_respond_with :redirect
-      must_redirect_to task_path(task)
 
-      task.reload
-      expect(task.name).must_equal(task_data[:task][:name])
     end
+    
+    it 'Payment will not go through if the stock is less than quantity' do
 
-    it 'will redirect to the root page if given an invalid id' do
-      get task_path(-1)
+      product = Product.first
 
-      must_respond_with :redirect
-      must_redirect_to tasks_path
+      order_hash = {
+        order_item: {
+          product_id: product.id,
+          quantity: 1,
+        }
+      }
+
+      post orders_path, params: order_hash
+      
+      order_id = session[:order_id]
+
+      order_item = OrderItem.find_by(order_id: order_id)
+
+      order_item.quantity = 51
+
+      order_item.save
+
+      update_hash = {
+        order: {
+          status: 'paid',
+          email: 'test@email.com',
+          address: 'random address',
+          name: 'Jack',
+          cc_name: 'Jackie',
+          cc_exp: 20190501,
+          cc_num: 12345432112344321
+        }
+      }
+
+      patch order_path(order_id), params: update_hash
+
+      expect(order_item.product.stock).must_equal 50
+
+      must_respond_with :bad_request
+
     end
   end
 end
