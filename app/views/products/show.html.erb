@@ -32,10 +32,10 @@
   </div>
 </section>
 
-<%= link_to "Leave a Review", new_product_review_path(@product.id), class: "btn btn-primary" %>
-
-
 <section>
+<% if @current_user != @product.merchant %>
+  <%= link_to "Leave a Review", new_product_review_path(@product.id), class: "btn btn-primary" %>
+<% end %>
   <h3>Review</h3>
   <table class="table">
     <thead>

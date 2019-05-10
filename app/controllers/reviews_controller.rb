@@ -1,13 +1,13 @@
 class ReviewsController < ApplicationController
   skip_before_action :require_login
   before_action :find_product, only: [:new]
+  before_action :current_user
 
-  def new
-    if session[:user_id] == @product.merchant_id
+  def new 
+    if @current_user == @product.merchant
       flash[:status] = :failure
-      flash[:message] = 'You cannot review your own product.'
-      redirect_to products_path
-      nil
+      flash[:result_text] = 'You cannot review your own product.'
+      redirect_to product_path(@product)
     else
       @review = Review.new
     end
@@ -15,9 +15,9 @@ class ReviewsController < ApplicationController
 
   def create
     @product = Product.find_by(id: params[:product_id])
-    @review = @product.reviews.new(
-      review_params
-    )
+      @review = @product.reviews.new(
+        review_params
+      )
     if @review.save
       flash[:status] = :success
       flash[:result_text] = 'Your review was successfully created.'

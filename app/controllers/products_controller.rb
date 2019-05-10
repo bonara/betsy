@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   skip_before_action :require_login, except: [:new, :create, :destroy]
+  before_action :current_user
   before_action :find_product, only: [:show, :edit, :update, :destroy]
 
   def root; end
@@ -46,9 +47,6 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    puts 'controller'
-
-    puts @product.id
     @product.destroy!
     flash[:status] = :success
     flash[:result_text] = "Successfully destroyed #{@product.name}"
