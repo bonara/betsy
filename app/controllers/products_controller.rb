@@ -62,8 +62,6 @@ class ProductsController < ApplicationController
   end
 
   def find_product
-    puts 'test'
-    puts params[:id]
     @product = Product.find_by(id: params[:id])
     unless @product
       head :not_found
