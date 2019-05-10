@@ -1,6 +1,11 @@
 class OrdersController < ApplicationController
   skip_before_action :require_login
-  before_action :find_order, only: [:show, :edit]
+  before_action :find_order, only: [:show, :edit, :destroy]
+
+  def index
+    @orders = Order.all
+  end
+
   # this is the cart
   def show; end
 
@@ -52,26 +57,24 @@ class OrdersController < ApplicationController
     @order.transaction do
       @order.order_items.each do |item|
         @purchased_product = Product.find_by(id: item.product_id)
-        next unless @purchased_product.stock > item.quantity.to_i
-
-        @purchased_product.stock -= item.quantity.to_i
-        next if @purchased_product.save
-
-        flash.now[:status] = :failure
-        flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
-        render :edit, status: :bad_request
-        return
+        if @purchased_product.stock > item.quantity.to_i
+          @purchased_product.stock -= item.quantity.to_i
+          @purchased_product.save
+        else
+          flash.now[:status] = :failure
+          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+          render :edit, status: :bad_request
+          return
+        end
       end
 
       @order.update_attributes(order_params)
-      if @order.save
-        @order.status = 'paid'
-        @order.save
+      @order.status = 'paid'
+      if @order.save!
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
         session[:order_id] = nil
         redirect_to confirmation_path(@order.id)
-
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Purchase not successful'
@@ -87,31 +90,33 @@ class OrdersController < ApplicationController
 
   # Empty the cart
   def destroy
+    unless @order
+      head :not_found
+      return
+    end
     @order.order_items.destroy_all
     flash[:status] = :success
     flash[:result_text] = 'Your cart is now empty'
+    
     redirect_back(fallback_location: root_path)  
-    unless @order
-      head :not_found
-      return
-    end
   end
 
-  private
+end
 
-  def order_params
-    params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
-  end
+private
 
-  def order_item_params
-    params.require(:order_item).permit(:quantity, :product_id)
-  end
+def order_params
+  params.require(:order).permit(:status, :email, :address, :name, :cc_name, :cc_exp, :cc_num)
+end
 
-  def find_order
-    @order = Order.find_by(id: params[:id])
-    unless @order
-      head :not_found
-      return
-    end
+def order_item_params
+  params.require(:order_item).permit(:quantity, :product_id)
+end
+
+def find_order
+  @order = Order.find_by(id: params[:id])
+  unless @order
+    head :not_found
+    return
   end
 end
