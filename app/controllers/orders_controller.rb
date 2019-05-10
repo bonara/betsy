@@ -61,10 +61,10 @@ class OrdersController < ApplicationController
           @purchased_product.stock -= item.quantity.to_i
           @purchased_product.save
         else
-        flash.now[:status] = :failure
-        flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
-        render :edit, status: :bad_request
-        return
+          flash.now[:status] = :failure
+          flash.now[:result_text] = "#{@purchased_product} has #{@purchased_product.stock} stock. Please update your cart"
+          render :edit, status: :bad_request
+          return
         end
       end
 

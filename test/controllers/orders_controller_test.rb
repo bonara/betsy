@@ -100,7 +100,7 @@ describe OrdersController do
   end
 
   describe "create" do
-    it "be able to create a new order with no existing order" do
+    it "be able to create a new order with no existing cart/order" do
       product = Product.first
 
       order_hash = {
@@ -118,9 +118,11 @@ describe OrdersController do
       expect(order_item.quantity).must_equal 2
     end
 
-    it "be able to create a new order WITH existing order" do
+    it "be able to create a new order WITH existing cart/order" do
 
       product = Product.first
+
+      order = Order.first
 
       order_hash = {
         order_item: {
@@ -130,12 +132,11 @@ describe OrdersController do
       }
     
       post orders_path, params: order_hash
-      post orders_path, params: order_hash
 
-      order_item = OrderItem.find_by(product_id: product.id)
+      order_item = OrderItem.find_by(order_id: order.id)
 
       expect(order_item.product).must_equal product
-      expect(order_item.quantity).must_equal 4
+      expect(order_item.quantity).must_equal 2
 
     end
   end
@@ -143,9 +144,6 @@ describe OrdersController do
   describe 'update' do 
     it 'Can purchase a product' do
       product = Product.first
-
-      stock = product.stock
-      price = product.price
 
       order_hash = {
         order_item: {
