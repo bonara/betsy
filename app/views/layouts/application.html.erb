@@ -5,7 +5,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', 'https://fonts.googleapis.com/css?family=Roboto' %>
-    <%= stylesheet_link_tag 'application', 'https://fonts.googleapis.com/css?family=Domine' %>
+    <%= stylesheet_link_tag 'application', 'https://fonts.googleapis.com/css?family=Lato' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
@@ -14,7 +14,7 @@
     <header>
       <nav class="navbar fixed-top navbar-expand-lg navbar-light">
         <div class="navbar-brand"> 
-        <%= link_to "Planetsy", root_path %>
+        <%= link_to "Planetsy", root_path, class:'nav-color' %>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
         <div class=" nav-header collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="nav site-nav-container">
             <li class="nav-item">
-                <%= link_to "All Tours", products_path %>
+                <%= link_to "All Tours", products_path, class:'nav-color' %>
             </li>
             <li class="nav-item">
                 <div class="dropdown">
@@ -74,23 +74,23 @@
           <ul class="nav user-nav-container">
             <% if @current_user %>
             <li class="nav-item">
-              <%= link_to "Logged in as #{@current_user.username}", merchant_path(@current_user) %>
+              <%= link_to "Logged in as #{@current_user.username}", merchant_path(@current_user), class:'nav-color' %>
             </li>
             <li class="nav-item">
-              <%= link_to "Log out", logout_path, method: "delete" %>
+              <%= link_to "Log out", logout_path, method: "delete", class:'nav-color' %>
             </li>
 
             <% else %>
 
             <li class="nav-item">
-              <%= link_to "Login with GitHub", github_login_path %>
+              <%= link_to "Login with GitHub", github_login_path, class:'nav-color' %>
             </li>
             <% end %>     
             <li class="nav-item">
               <% if @order%>
-                <%= link_to "My Cart", order_path(@order) %>
+                <%= link_to "My Cart", order_path(@order), class:'nav-color' %>
               <% else %>
-                <%= link_to "My Cart", new_order_path %>
+                <%= link_to "My Cart", new_order_path, class:'nav-color' %>
               <% end %>
             </li>
           </ul>

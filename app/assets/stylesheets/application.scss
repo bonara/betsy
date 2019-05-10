@@ -8,36 +8,41 @@
 
 
 $primary-font: 'Roboto', sans-serif;
-$primary-color: #288EBA;
-$dark-color: #1D6787;
-$secondary-color: #41AADB;
-$light-color: #E8F1F2;
-$dark-blue: rgb(32, 93, 150);
+$secondary-font: 'Lato', sans-serif;
+$primary-color: #1F3335;
+$dark-color: rgba(37, 39, 40, 0.94);
+$light-color: white;
+$secondary-color: lightgray;
 
 $default-border: 2px solid;
 
 body {
-  // min-height: 500px; 
   margin:0;
   padding:0;
   padding-top: 65px; 
   word-spacing: 1.5px;
-}
-body, h1, h2, h3, h4, h5 {
   font-family: $primary-font;
 }
 
 h1, h2, h3, h4, h5 {
   font-weight: bold;
+  font-family: $secondary-font;
+  color: $primary-color;
 }
 
-a, h2, h3 {
+.nav-color {
+  color: $light-color;
+}
+
+a {
+  cursor: pointer;
   color: $primary-color;
 }
 
 a:hover {
-  color: $dark-blue;
   text-decoration: none;
+  border-bottom: 2.5px solid white;
+  color: rgb(247, 109, 132);
 }
 
 ul {
@@ -48,6 +53,9 @@ ul {
   vertical-align: middle;
 }
 
+tr:nth-child(even) {
+  background: $secondary-color;
+}
 .nav-header {
   display: flex;
   flex-direction: row;
@@ -57,25 +65,36 @@ ul {
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
-  background-color: $light-color;
-  color:$primary-color;
+  background-color: $dark-color;
+  color: $light-color;
   padding: .5% 0;
-  font-size: 1.2em;
-  
+  font-family: $secondary-font;
+  font-size: 1.2em;  
+}
+
+.navbar > a {
+  color: $light-color;
 }
 
 .nav-item {
   margin: 0.7rem;
+  padding-right: 10px;
+  color: $light-color;
+}
+
+user-nav-container {
+  color: $light-color;
 }
 
 .navbar-brand {
   float: left;
   padding: 0 15px;
   font-size: 1.3em;
+  color: $light-color;
 }
 
 .dropdown-item {
-  color:$primary-color;
+  color: $dark-color;
 }
 // Carousel
 #carousel {
@@ -107,8 +126,8 @@ ul {
 
 // Footer
 footer {
-  background-color:$light-color;
-  color: $primary-color;
+  background-color:$dark-color;
+  color: $light-color;
   height: 70px;
   bottom: 0;
   left:0;
