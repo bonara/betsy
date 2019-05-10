@@ -15,17 +15,23 @@ class ReviewsController < ApplicationController
 
   def create
     @product = Product.find_by(id: params[:product_id])
-      @review = @product.reviews.new(
-        review_params
-      )
-    if @review.save
-      flash[:status] = :success
-      flash[:result_text] = 'Your review was successfully created.'
-      redirect_to product_path(@product.id)
-
+    if @current_user == @product.merchant
+      flash[:status] = :failure
+      flash[:result_text] = 'You cannot review your own product.'
+      redirect_to product_path(@product)
     else
-      render :new, status: :bad_request
-    end
+        @review = @product.reviews.new(
+          review_params
+        )
+      if @review.save
+        flash[:status] = :success
+        flash[:result_text] = 'Your review was successfully created.'
+        redirect_to product_path(@product.id)
+
+      else
+        render :new, status: :bad_request
+      end
+    end 
   end
 
   private
