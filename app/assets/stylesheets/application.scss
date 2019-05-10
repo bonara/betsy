@@ -30,6 +30,11 @@ h1, h2, h3, h4, h5 {
   color: $primary-color;
 }
 
+h1 {
+  text-align: center;
+  padding: 10px;
+}
+
 .nav-color {
   color: $light-color;
 }
@@ -96,6 +101,11 @@ user-nav-container {
 .dropdown-item {
   color: $dark-color;
 }
+
+.cart-empty{
+  color: rgb(247, 109, 132);
+}
+
 // Carousel
 #carousel {
   margin:0;
@@ -140,5 +150,5 @@ main {
 
 // Section
 section {
-  margin: 30px;
+  margin: 35px;
 }
