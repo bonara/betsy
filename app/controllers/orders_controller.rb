@@ -69,14 +69,12 @@ class OrdersController < ApplicationController
       end
 
       @order.update_attributes(order_params)
-      if @order.save
-        @order.status = 'paid'
-        @order.save
+      @order.status = 'paid'
+      if @order.save!
         flash[:status] = :success
         flash[:result_text] = 'Purchase successful'
         session[:order_id] = nil
         redirect_to confirmation_path(@order.id)
-
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Purchase not successful'
@@ -101,16 +99,6 @@ class OrdersController < ApplicationController
     flash[:result_text] = 'Your cart is now empty'
     
     redirect_back(fallback_location: root_path)  
-  end
-
-  def confirmation
-    @paid_order = Order.find_by(id: params[:id])
-
-    # if @paid_order
-    #   session[:paid_order] = nil
-    # else
-    #   flash[:warning] = 'Your order not go through. Please try again.'
-    # end
   end
 
 end

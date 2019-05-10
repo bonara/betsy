@@ -3,7 +3,7 @@ require 'test_helper'
 describe OrdersController do
   describe 'index' do
     it 'succeeds when there are orders' do
-      get orders_path
+      get root_path
 
       must_respond_with :success
     end
@@ -13,7 +13,7 @@ describe OrdersController do
         order.destroy
       end
 
-      get orders_path
+      get root_path
 
       must_respond_with :success
     end
@@ -154,7 +154,7 @@ describe OrdersController do
 
       post orders_path, params: order_hash
 
-      order_item = OrderItem.find_by(product_id: product.id)
+      order_id = session[:order_id]
 
       update_hash = {
         order: {
@@ -167,10 +167,17 @@ describe OrdersController do
         }
       }
 
-      patch order_path(order_item.order_id), params: update_hash
+      patch order_path(order_id), params: update_hash
+
+      order_item = OrderItem.find_by(order_id: order_id)
+
+      order = Order.find(order_id)
 
       expect(order_item.product.stock).must_equal 48
-      expect(order_item.order.status).must_equal 'paid'
+      expect(order.status).must_equal 'paid'
+      expect(session[:order_id]).must_be_nil
+
+      must_respond_with :redirect
 
     end
     
@@ -184,9 +191,12 @@ describe OrdersController do
           quantity: 1,
         }
       }
+
       post orders_path, params: order_hash
       
-      order_item = OrderItem.find_by(product_id: product.id)
+      order_id = session[:order_id]
+
+      order_item = OrderItem.find_by(order_id: order_id)
 
       order_item.quantity = 51
 
@@ -204,7 +214,9 @@ describe OrdersController do
         }
       }
 
-      patch order_path(order_item.order_id), params: update_hash
+      patch order_path(order_id), params: update_hash
+
+      expect(order_item.product.stock).must_equal 50
 
       must_respond_with :bad_request
 
