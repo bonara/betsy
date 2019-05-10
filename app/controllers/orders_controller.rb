@@ -57,7 +57,7 @@ class OrdersController < ApplicationController
     @order.transaction do
       @order.order_items.each do |item|
         @purchased_product = Product.find_by(id: item.product_id)
-        if @purchased_product.stock > item.quantity.to_i
+        if @purchased_product.stock >= item.quantity.to_i
           @purchased_product.stock -= item.quantity.to_i
           @purchased_product.save
         else
