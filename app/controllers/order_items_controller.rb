@@ -16,11 +16,14 @@ class OrderItemsController < ApplicationController
         flash[:status] = :success
         flash[:result_text] = "Successfully updated quantity"
         redirect_to root_path
+        return
       end
     end
       flash.now[:status] = :failure
       flash.now[:result_text] = 'Could not update quantity'
       flash.now[:messages] = @order_item.errors.messages
+      head :bad_request
+      return
   end
 
 # Delete specific order item
