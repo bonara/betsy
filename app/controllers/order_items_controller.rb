@@ -1,17 +1,18 @@
 class OrderItemsController < ApplicationController
   skip_before_action :require_login
-  before_action :find_order_item, only: %i[show edit update]
+  before_action :find_order_item, only: [:edit, :update]
+
   def index
     @order_items = OrderItem.all
   end
-
-  def show; end
 
   def edit; end
 
   def update
     @order_item = OrderItem.find(params[:id])
     @product = @order_item.product
+    puts 'controller'
+    puts params
 
     if @product.stock > order_item_params[:quantity].to_i
       @order_item.quantity = order_item_params[:quantity].to_i
@@ -19,6 +20,7 @@ class OrderItemsController < ApplicationController
         flash[:status] = :success
         flash[:result_text] = "Successfully updated quantity"
         redirect_back(fallback_location: root_path)
+        puts 'controller'
       else
         flash.now[:status] = :failure
         flash.now[:result_text] = 'Could not update quantity'
@@ -28,16 +30,15 @@ class OrderItemsController < ApplicationController
     end
   end
 
-  def new
-    @order_item = OrderItem.new
-  end
-
 # Delete specific order item
-  def destroy
-    @order_item = OrderItem.find_by(id: params[:id])
-    @order_item.destroy
-    redirect_back(fallback_location: root_path)
+def destroy
+  unless @order_item
+    head :not_found
+    return
   end
+  @order_item.destroy
+  redirect_back(fallback_location: root_path)  
+end
 
   private
 
@@ -47,6 +48,10 @@ class OrderItemsController < ApplicationController
 
   def find_order_item
     @order_item = OrderItem.find_by(id: params[:id])
-    render_404 unless @order_item
+    unless @order_item
+      head :not_found
+      return
+    end
   end
+
 end

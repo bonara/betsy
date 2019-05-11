@@ -9,8 +9,10 @@ Rails.application.routes.draw do
   
   resources :categories
   get '/orders/:id/confirmation', to: 'orders#confirmation', as: 'confirmation'
+  
   resources :orders
   post '/orders/new', to: 'orders#create'
+  
   resources :order_items
 
   get '/auth/github', as: 'github_login'
